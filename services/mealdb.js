@@ -2,6 +2,8 @@
 // Centraliza toda comunicação com a TheMealDB API (gratuita, sem chave).
 // Isola a lógica de rede: se a API mudar, só este arquivo precisa ser alterado.
 
+import { normalizeIngredientForAPI } from './translator';
+
 const BASE_URL = 'https://www.themealdb.com/api/json/v1/1';
 
 // Timeout em ms para cada requisição
@@ -40,10 +42,17 @@ export async function fetchRecipesByIngredients(ingredients) {
 
   const MAX_RESULTS = 20; // Limite para não sobrecarregar a API (decisão técnica intencional)
 
-  // Mapa: idMeal → { dados da receita, contagem de coincidências }
+  // Normaliza todos os ingredientes para inglês antes de qualquer chamada à API.
+  // Isso resolve ingredientes digitados em português (ex.: "feijão" → "beans").
+  const normalizedIngredients = await Promise.all(
+    ingredients.map((ing) => normalizeIngredientForAPI(ing))
+  );
+
+  // Remove duplicatas que possam surgir da normalização (ex.: "frango" e "chicken" → "chicken")
+  const uniqueIngredients = [...new Set(normalizedIngredients)];
   const mealMap = new Map();
 
-  for (const ingredient of ingredients) {
+  for (const ingredient of uniqueIngredients) {
     try {
       const data = await fetchWithTimeout(
         `${BASE_URL}/filter.php?i=${encodeURIComponent(ingredient)}`

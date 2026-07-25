@@ -218,3 +218,180 @@ export function translateCategory(category) {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+// =============================================================
+// === 5. Normalização PT-BR → EN para chamadas de API ===
+// Resolve o problema de ingredientes digitados em português pelo usuário.
+// A MealDB só entende inglês — este mapa converte os termos mais comuns.
+// =============================================================
+
+export const PT_TO_EN_INGREDIENTS = {
+  // Proteínas
+  'frango': 'chicken',
+  'carne': 'beef',
+  'carne bovina': 'beef',
+  'carne moída': 'ground beef',
+  'carne moida': 'ground beef',
+  'porco': 'pork',
+  'ovo': 'egg',
+  'ovos': 'egg',
+  'atum': 'tuna',
+  'salmão': 'salmon',
+  'salmao': 'salmon',
+  'camarão': 'shrimp',
+  'camarao': 'shrimp',
+  'bacon': 'bacon',
+  'cordeiro': 'lamb',
+  'peru': 'turkey',
+  'pato': 'duck',
+  'peixe': 'fish',
+  // Vegetais
+  'tomate': 'tomato',
+  'cebola': 'onion',
+  'alho': 'garlic',
+  'batata': 'potato',
+  'cenoura': 'carrot',
+  'brócolis': 'broccoli',
+  'brocolis': 'broccoli',
+  'espinafre': 'spinach',
+  'pimentão': 'pepper',
+  'pimentao': 'pepper',
+  'cogumelo': 'mushroom',
+  'milho': 'corn',
+  'pepino': 'cucumber',
+  'alface': 'lettuce',
+  'abobrinha': 'zucchini',
+  'berinjela': 'eggplant',
+  'repolho': 'cabbage',
+  'salsão': 'celery',
+  'salsao': 'celery',
+  'alho-poró': 'leek',
+  'alho poro': 'leek',
+  'gengibre': 'ginger',
+  // Raízes regionais (muito importantes para evitar "não encontrou")
+  'mandioca': 'cassava',
+  'macaxeira': 'cassava',
+  'aipim': 'cassava',
+  'inhame': 'yam',
+  'cará': 'yam',
+  'cara': 'yam',
+  'beterraba': 'beetroot',
+  'nabo': 'turnip',
+  // Carboidratos
+  'arroz': 'rice',
+  'macarrão': 'pasta',
+  'macarrao': 'pasta',
+  'pão': 'bread',
+  'pao': 'bread',
+  'farinha': 'flour',
+  'farinha de trigo': 'flour',
+  'aveia': 'oats',
+  'tapioca': 'tapioca',
+  'cuscuz': 'couscous',
+  // Laticínios
+  'leite': 'milk',
+  'queijo': 'cheese',
+  'manteiga': 'butter',
+  'creme de leite': 'cream',
+  'iogurte': 'yogurt',
+  'requeijão': 'cream cheese',
+  'requeijao': 'cream cheese',
+  // Temperos
+  'sal': 'salt',
+  'azeite': 'olive oil',
+  'óleo': 'oil',
+  'oleo': 'oil',
+  'molho de soja': 'soy sauce',
+  'shoyu': 'soy sauce',
+  'vinagre': 'vinegar',
+  'açúcar': 'sugar',
+  'acucar': 'sugar',
+  'limão': 'lemon',
+  'limao': 'lemon',
+  'lima': 'lime',
+  'mel': 'honey',
+  'cominho': 'cumin',
+  'páprica': 'paprika',
+  'paprica': 'paprika',
+  'canela': 'cinnamon',
+  'orégano': 'oregano',
+  'oregano': 'oregano',
+  'manjericão': 'basil',
+  'manjericao': 'basil',
+  'tomilho': 'thyme',
+  'alecrim': 'rosemary',
+  'salsinha': 'parsley',
+  'coentro': 'coriander',
+  'louro': 'bay leaves',
+  'pimenta do reino': 'black pepper',
+  'pimenta-do-reino': 'black pepper',
+  'fermento': 'baking powder',
+  'bicarbonato': 'baking soda',
+  'mostarda': 'mustard',
+  'maionese': 'mayonnaise',
+  'ketchup': 'ketchup',
+  'molho inglês': 'worcestershire sauce',
+  'molho ingles': 'worcestershire sauce',
+  'água': 'water',
+  'agua': 'water',
+  'cúrcuma': 'turmeric',
+  'curcuma': 'turmeric',
+  'açafrão': 'saffron',
+  'acafrao': 'saffron',
+};
+
+// Cache em memória para normalizações já feitas
+const normalizationCache = new Map();
+
+/**
+ * Normaliza um ingrediente para o inglês que a MealDB entende.
+ * Fluxo:
+ *   1. Já está em inglês? (está no mapa EN→PT como chave) → retorna direto
+ *   2. Está no mapa PT→EN? → retorna o equivalente em inglês
+ *   3. Fallback: chama MyMemory (pt-BR → en) e cacheia o resultado
+ *
+ * @param {string} ingredient - Ingrediente digitado pelo usuário (PT ou EN)
+ * @returns {Promise<string>} Ingrediente em inglês para a API
+ */
+export async function normalizeIngredientForAPI(ingredient) {
+  if (!ingredient) return ingredient;
+  const key = ingredient.trim().toLowerCase();
+
+  // Cache hit
+  if (normalizationCache.has(key)) return normalizationCache.get(key);
+
+  // Já é inglês (chave do mapa EN→PT)?
+  if (INGREDIENT_TRANSLATIONS[key]) {
+    normalizationCache.set(key, key);
+    return key;
+  }
+
+  // Mapa PT→EN estático
+  if (PT_TO_EN_INGREDIENTS[key]) {
+    const en = PT_TO_EN_INGREDIENTS[key];
+    normalizationCache.set(key, en);
+    return en;
+  }
+
+  // Heurística: sem caracteres acentuados ou especiais → provavelmente já é inglês
+  if (/^[a-z0-9\s]+$/.test(key)) {
+    normalizationCache.set(key, key);
+    return key;
+  }
+
+  // Último recurso: MyMemory pt-BR → en
+  try {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(key)}&langpair=pt-BR|en`;
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const data = await response.json();
+    if (data.responseStatus === 200 && data.responseData?.translatedText) {
+      const translated = data.responseData.translatedText.toLowerCase().trim();
+      normalizationCache.set(key, translated);
+      return translated;
+    }
+  } catch (_) {}
+
+  // Se tudo falhar, retorna o original (a API tentará de qualquer forma)
+  normalizationCache.set(key, key);
+  return key;
+}

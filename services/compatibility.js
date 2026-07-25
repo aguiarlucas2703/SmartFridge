@@ -3,21 +3,36 @@
 // ingredientes disponíveis na despensa do usuário e os que a receita exige.
 // Arquivo isolado para facilitar explicação na apresentação.
 
+// Importa o mapa PT→EN para normalizar ingredientes da despensa
+// (o usuário pode ter digitado "feijão" mas a receita usa "beans")
+import { PT_TO_EN_INGREDIENTS } from './translator';
+
 /**
  * Normaliza uma string de ingrediente para comparação:
- * - Remove espaços extras
- * - Converte para lowercase
- * - Remove caracteres especiais comuns em ingredientes da MealDB
+ * - Remove espaços extras e converte para lowercase
+ * - Se for português (ex.: "feijão"), traduz para o inglês equivalente
+ * - Remove acentos residuais e pontuação
  *
  * @param {string} str
  * @returns {string}
  */
 function normalize(str) {
-  return str
+  const cleaned = str
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '') // remove pontuação
-    .replace(/\s+/g, ' ');        // normaliza espaços
+    .replace(/[^a-zà-ü0-9\s]/gi, '') // remove pontução mas mantém acentos por ora
+    .replace(/\s+/g, ' ');
+
+  // Traduz PT→EN se encontrar no mapa
+  if (PT_TO_EN_INGREDIENTS && PT_TO_EN_INGREDIENTS[cleaned]) {
+    return PT_TO_EN_INGREDIENTS[cleaned];
+  }
+
+  // Remove acentos para comparação mais tolerante ("feijao" == "feijão")
+  return cleaned
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '');
 }
 
 /**
