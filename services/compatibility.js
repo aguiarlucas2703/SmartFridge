@@ -16,7 +16,7 @@ import { PT_TO_EN_INGREDIENTS } from './translator';
  * @param {string} str
  * @returns {string}
  */
-function normalize(str) {
+export function normalize(str) {
   const cleaned = str
     .trim()
     .toLowerCase()

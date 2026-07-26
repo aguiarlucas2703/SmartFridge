@@ -12,13 +12,20 @@ import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { tipsCategories } from '../data/tips';
 import MenuDrawer from '../components/MenuDrawer';
+import { useProfile } from '../context/ProfileContext';
+import { useTips } from '../context/TipsContext';
+import { getTipsMatchingPantry } from '../services/tipsMatcher';
 
 export default function TipsScreen({ navigation }) {
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const { pantry } = useProfile();
+  const { appliedTipIds, totalTipsCount } = useTips();
 
   const handleCategoryPress = (category) => {
     navigation.navigate('TipsDetail', { category });
   };
+  
+  const matchingTips = getTipsMatchingPantry(pantry, tipsCategories);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -47,6 +54,43 @@ export default function TipsScreen({ navigation }) {
           Pequenas mudanças no dia a dia podem reduzir drasticamente o desperdício de alimentos. Explore nossas dicas:
         </Text>
 
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressText}>
+            🏆 Você já aplica {appliedTipIds.length} de {totalTipsCount} dicas
+          </Text>
+        </View>
+
+        {matchingTips.length > 0 && (
+          <View style={styles.contextualSection}>
+            <Text style={styles.sectionTitle}>💡 Baseado na sua despensa agora</Text>
+            <View style={styles.contextualList}>
+              {matchingTips.map(tip => {
+                // Descobre a categoria pai para poder navegar
+                const parentCategory = tipsCategories.find(c => c.tips.some(t => t.id === tip.id));
+                const isApplied = appliedTipIds.includes(tip.id);
+
+                return (
+                  <TouchableOpacity
+                    key={tip.id}
+                    style={styles.contextualCard}
+                    activeOpacity={0.8}
+                    onPress={() => handleCategoryPress(parentCategory)}
+                  >
+                    <View style={styles.contextualHeader}>
+                      <Text style={styles.contextualTitle}>{tip.title}</Text>
+                      {isApplied && <Text style={styles.appliedIcon}>✓</Text>}
+                    </View>
+                    <Text style={styles.contextualContent} numberOfLines={2}>
+                      {tip.content}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
+        <Text style={styles.sectionTitle}>Todas as categorias</Text>
         <View style={styles.categoriesContainer}>
           {tipsCategories.map((category) => (
             <TouchableOpacity
@@ -169,5 +213,66 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: colors.border,
     marginLeft: 8,
+  },
+  progressContainer: {
+    backgroundColor: colors.primaryLight,
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 24,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(37, 79, 219, 0.1)',
+  },
+  progressText: {
+    ...typography.styles.label,
+    color: colors.primary,
+    fontWeight: '700',
+  },
+  sectionTitle: {
+    ...typography.styles.subtitle,
+    color: colors.text,
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  contextualSection: {
+    marginBottom: 24,
+  },
+  contextualList: {
+    gap: 12,
+  },
+  contextualCard: {
+    backgroundColor: colors.surface,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  contextualHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  contextualTitle: {
+    ...typography.styles.label,
+    color: colors.primary,
+    fontWeight: '700',
+    flex: 1,
+  },
+  appliedIcon: {
+    color: colors.success,
+    fontWeight: '800',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  contextualContent: {
+    ...typography.styles.caption,
+    color: colors.textSecondary,
+    lineHeight: 18,
   },
 });

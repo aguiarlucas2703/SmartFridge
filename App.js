@@ -14,6 +14,7 @@ if (Platform.OS !== 'web') {
 
 import { ProfileProvider } from './context/ProfileContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import { TipsProvider } from './context/TipsContext';
 import RootNavigator from './navigation/RootNavigator';
 
 export default function App() {
@@ -24,8 +25,10 @@ export default function App() {
         {/* ProfileProvider envolve FavoritesProvider para que ambos sejam acessíveis */}
         <ProfileProvider>
           <FavoritesProvider>
-            <StatusBar style="dark" backgroundColor="#254fdb" />
-            <RootNavigator />
+            <TipsProvider>
+              <StatusBar style="dark" backgroundColor="#254fdb" />
+              <RootNavigator />
+            </TipsProvider>
           </FavoritesProvider>
         </ProfileProvider>
       </SafeAreaProvider>
