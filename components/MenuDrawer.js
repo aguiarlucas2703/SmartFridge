@@ -122,6 +122,11 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
             </View>
           </TouchableOpacity>
 
+          <TouchableOpacity style={styles.navItem} onPress={() => handleNav('TipsTab')}>
+            <Text style={styles.navEmoji}>🌱</Text>
+            <Text style={styles.navText}>Dicas Anti-desperdício</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Favorites')}>
             <Text style={styles.navEmoji}>❤️</Text>
             <View style={styles.navRight}>
