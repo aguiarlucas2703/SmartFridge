@@ -22,14 +22,27 @@ import ProfileScreen from '../screens/ProfileScreen';
 import TipsScreen from '../screens/TipsScreen';
 import TipsDetailScreen from '../screens/TipsDetailScreen';
 
-// === Ícones SVG simples como componentes (sem dependência extra) ===
-import { Text } from 'react-native';
+// === Ícones customizados ===
+import { Text, Image } from 'react-native';
 
-function TabIcon({ emoji, focused }) {
+function TabIcon({ source, emoji, focused }) {
+  if (emoji) {
+    return (
+      <Text style={{ fontSize: focused ? 26 : 22, opacity: focused ? 1 : 0.5 }}>
+        {emoji}
+      </Text>
+    );
+  }
   return (
-    <Text style={{ fontSize: focused ? 26 : 22, opacity: focused ? 1 : 0.5 }}>
-      {emoji}
-    </Text>
+    <Image
+      source={source}
+      style={{
+        width: focused ? 28 : 24,
+        height: focused ? 28 : 24,
+        opacity: focused ? 1 : 0.5,
+        resizeMode: 'contain',
+      }}
+    />
   );
 }
 
@@ -75,7 +88,7 @@ function MainTabs() {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Início',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon source={require('../assets/icons/icon_home.png')} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -83,7 +96,7 @@ function MainTabs() {
         component={PantryStack}
         options={{
           tabBarLabel: 'Despensa',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🧺" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon source={require('../assets/icons/icon_pantry.png')} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -91,7 +104,7 @@ function MainTabs() {
         component={TipsStack}
         options={{
           tabBarLabel: 'Dicas',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon source={require('../assets/icons/icon_tips.png')} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -99,7 +112,7 @@ function MainTabs() {
         component={FavoritesScreen}
         options={{
           tabBarLabel: 'Favoritos',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="❤️" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon source={require('../assets/icons/icon_favorites.png')} focused={focused} />,
         }}
       />
       <Tab.Screen
@@ -107,7 +120,7 @@ function MainTabs() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Perfil',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" focused={focused} />, // Keep emoji since we only have 4 icons
         }}
       />
     </Tab.Navigator>

@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
@@ -70,12 +71,12 @@ export default function HomeScreen({ navigation }) {
         {/* Cards de stats */}
         <View style={styles.statsRow}>
           <View style={[styles.statCard, { backgroundColor: colors.primary }]}>
-            <Text style={styles.statEmoji}>🧺</Text>
+            <Image source={require('../assets/icons/icon_pantry.png')} style={styles.statIcon} />
             <Text style={styles.statValue}>{pantry.length}</Text>
             <Text style={styles.statLabel}>ingredientes{'\n'}na despensa</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: colors.accent }]}>
-            <Text style={styles.statEmoji}>❤️</Text>
+            <Image source={require('../assets/icons/icon_favorites.png')} style={styles.statIcon} />
             <Text style={styles.statValue}>{favorites.length}</Text>
             <Text style={styles.statLabel}>receitas{'\n'}favoritas</Text>
           </View>
@@ -209,8 +210,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
   },
-  statEmoji: {
-    fontSize: 28,
+  statIcon: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+    marginBottom: 4,
+    tintColor: colors.surface,
   },
   statValue: {
     fontSize: 32,

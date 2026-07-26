@@ -106,12 +106,12 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           <Text style={styles.sectionLabel}>NAVEGAR</Text>
 
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Home')}>
-            <Text style={styles.navEmoji}>🏠</Text>
+            <Image source={require('../assets/icons/icon_home.png')} style={styles.navIcon} />
             <Text style={styles.navText}>Início</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('PantryTab')}>
-            <Text style={styles.navEmoji}>🧺</Text>
+            <Image source={require('../assets/icons/icon_pantry.png')} style={styles.navIcon} />
             <View style={styles.navRight}>
               <Text style={styles.navText}>Minha Despensa</Text>
               {pantry.length > 0 && (
@@ -123,12 +123,12 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('TipsTab')}>
-            <Text style={styles.navEmoji}>🌱</Text>
+            <Image source={require('../assets/icons/icon_tips.png')} style={styles.navIcon} />
             <Text style={styles.navText}>Dicas Anti-desperdício</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Favorites')}>
-            <Text style={styles.navEmoji}>❤️</Text>
+            <Image source={require('../assets/icons/icon_favorites.png')} style={styles.navIcon} />
             <View style={styles.navRight}>
               <Text style={styles.navText}>Favoritos</Text>
               {favorites.length > 0 && (
@@ -284,7 +284,16 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     gap: 12,
   },
-  navEmoji: { fontSize: 18, width: 24, textAlign: 'center' },
+  navIcon: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+  },
+  navEmoji: {
+    fontSize: 18,
+    width: 24,
+    textAlign: 'center',
+  },
   navText: {
     ...typography.body,
     color: colors.text,
