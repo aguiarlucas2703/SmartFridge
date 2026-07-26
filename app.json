@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "SmartFridge",
+    "slug": "smartfridge",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#edf1e2"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.smartfridge.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#edf1e2"
+      },
+      "package": "com.smartfridge.app"
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "plugins": [
+      "expo-sharing"
+    ]
+  }
+}
