@@ -149,12 +149,12 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
             <Text style={styles.sobreTitle}>Por que o SmartFridge existe?</Text>
             <Text style={styles.sobreText}>
               Cerca de <Text style={styles.highlight}>1/3 de todo alimento</Text> produzido no
-              mundo é desperdiçado — muito disso acontece dentro de casa, quando não
+              mundo é desperdiçado. Muito disso acontece dentro de casa, quando não
               sabemos o que fazer com o que está na geladeira.
             </Text>
             <Text style={styles.sobreText}>
               O SmartFridge resolve isso de um jeito simples: você diz o que tem, o app
-              encontra receitas reais que usam exatamente esses ingredientes —
+              encontra receitas reais que usam exatamente esses ingredientes
               <Text style={styles.highlight}> antes que estraguem</Text>.
             </Text>
           </View>
@@ -182,7 +182,7 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           <View style={styles.autoriaSection}>
             <Text style={styles.autoriaLabel}>Desenvolvido por</Text>
             <Text style={styles.autoriaName}>Lucas Aguiar</Text>
-            <Text style={styles.autoriaCourse}>Desenvolvimento Híbrido · 2025</Text>
+            <Text style={styles.autoriaCourse}>Desenvolvimento Híbrido · 2026</Text>
             <View style={styles.techRow}>
               {['React Native', 'Expo', 'TheMealDB'].map((t) => (
                 <View key={t} style={styles.techBadge}>
