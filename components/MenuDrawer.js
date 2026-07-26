@@ -12,7 +12,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
-  Linking,
+  Image,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
@@ -89,8 +89,11 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
         <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
           {/* === Cabeçalho do app === */}
           <View style={styles.brandSection}>
-            <Text style={styles.brandEmoji}>🥗</Text>
-            <Text style={styles.brandName}>SmartFridge</Text>
+            <Image
+              source={require('../assets/logo.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
             <View style={styles.missionBadge}>
               <Text style={styles.missionBadgeText}>♻️ Anti-desperdício</Text>
             </View>
@@ -235,17 +238,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
+  // Logo
+  logoImage: {
+    width: 220,
+    height: 80,
+  },
+
   // Branding
   brandSection: {
     alignItems: 'center',
-    paddingVertical: 24,
+    paddingVertical: 20,
     paddingHorizontal: 20,
-  },
-  brandEmoji: { fontSize: 52 },
-  brandName: {
-    ...typography.h2,
-    color: colors.primary,
-    marginTop: 8,
   },
   missionBadge: {
     marginTop: 8,
