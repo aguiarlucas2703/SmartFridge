@@ -101,10 +101,7 @@ export default function FavoritesScreen({ navigation }) {
   };
 
   const handlePress = (recipe) => {
-    navigation.navigate('PantryTab', {
-      screen: 'RecipeDetail',
-      params: { recipe },
-    });
+    navigation.navigate('RecipeDetail', { recipe });
   };
 
   return (

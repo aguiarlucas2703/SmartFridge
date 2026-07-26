@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
@@ -34,7 +35,7 @@ export default function TipsDetailScreen({ route, navigation }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.heroSection}>
-          <Text style={styles.heroEmoji}>{category.emoji}</Text>
+          <Image source={category.icon} style={styles.heroIcon} />
           <Text style={styles.heroDescription}>{category.description}</Text>
         </View>
 
@@ -96,9 +97,11 @@ const styles = StyleSheet.create({
     padding: 32,
     paddingTop: 16,
   },
-  heroEmoji: {
-    fontSize: 64,
+  heroIcon: {
+    width: 80,
+    height: 80,
     marginBottom: 16,
+    resizeMode: 'contain',
   },
   heroDescription: {
     ...typography.body,

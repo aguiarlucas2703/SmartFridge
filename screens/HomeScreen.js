@@ -121,12 +121,7 @@ export default function HomeScreen({ navigation }) {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.favoriteCard}
-                  onPress={() =>
-                    navigation.navigate('PantryTab', {
-                      screen: 'RecipeDetail',
-                      params: { recipe: item },
-                    })
-                  }
+                  onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}
                   activeOpacity={0.8}
                 >
                   <Text style={styles.favoriteThumbnail}>🍽️</Text>

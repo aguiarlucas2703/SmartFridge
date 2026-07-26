@@ -168,7 +168,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
         </TouchableOpacity>
         <View style={styles.floatingRight}>
           <TouchableOpacity style={styles.floatingBtn} onPress={handleShare}>
-            <Text style={styles.floatingBtnText}>↑</Text>
+            <Image source={require('../assets/icons/icon_share.png')} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
           </TouchableOpacity>
           <Animated.View style={{ transform: [{ scale: heartScale }] }}>
             <TouchableOpacity

@@ -5,7 +5,7 @@ export const tipsCategories = [
   {
     id: 'storage',
     title: 'Armazenamento Correto',
-    emoji: '🧊',
+    icon: require('../assets/icons/icon_fridge.png'),
     description: 'Aprenda a guardar seus alimentos para que durem mais.',
     tips: [
       {
@@ -28,7 +28,7 @@ export const tipsCategories = [
   {
     id: 'reuse',
     title: 'Reaproveitamento Criativo',
-    emoji: '♻️',
+    icon: require('../assets/icons/icon_recycle.png'),
     description: 'Não jogue fora! Veja como transformar sobras em novos pratos.',
     tips: [
       {
@@ -51,18 +51,23 @@ export const tipsCategories = [
   {
     id: 'planning',
     title: 'Planejamento Inteligente',
-    emoji: '📝',
-    description: 'Comprar melhor e gastar menos.',
+    icon: require('../assets/icons/icon_tasks.png'),
+    description: 'Compre melhor, cozinhe melhor, desperdice menos.',
     tips: [
       {
         id: 'planning-1',
-        title: 'A regra do PEPS',
-        content: 'PEPS significa "Primeiro que Entra, Primeiro que Sai". Ao chegar do mercado, coloque os itens novos no fundo da prateleira e puxe os antigos para frente. Assim você sempre consome o que está mais perto de vencer.',
+        title: 'Regra do "Primeiro a entrar, primeiro a sair"',
+        content: 'Quando chegar do mercado, coloque os produtos novos no fundo da geladeira ou despensa, e puxe os mais antigos para a frente. Assim, você consome o que está mais perto do vencimento primeiro.',
       },
       {
         id: 'planning-2',
-        title: 'Inventário antes do mercado',
-        content: 'Nunca vá às compras sem antes olhar o que já tem em casa. Tire uma foto da sua geladeira antes de sair ou mantenha a sua despensa do SmartFridge atualizada.',
+        title: 'Dia do "Limpa Geladeira"',
+        content: 'Defina um dia da semana (ex: sexta-feira) para não cozinhar nada novo. O objetivo é juntar todas as sobras da semana e criar um prato único: um mexidão, uma torta de liquidificador ou uma fritada.',
+      },
+      {
+        id: 'planning-3',
+        title: 'Congele porcionado',
+        content: 'Se comprou muita carne ou fez muito molho, não congele tudo em um pote só. Divida em porções pequenas (para 1 ou 2 refeições). Você só descongela o que vai comer, evitando o ciclo de recongelamento que estraga a comida.',
       }
     ]
   }

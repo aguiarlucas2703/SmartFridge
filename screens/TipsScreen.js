@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../theme/colors';
@@ -53,8 +54,8 @@ export default function TipsScreen({ navigation }) {
               activeOpacity={0.8}
               onPress={() => handleCategoryPress(category)}
             >
-              <View style={styles.emojiContainer}>
-                <Text style={styles.emoji}>{category.emoji}</Text>
+              <View style={styles.iconContainer}>
+                <Image source={category.icon} style={styles.icon} />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{category.title}</Text>
@@ -134,17 +135,21 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 2,
   },
-  emojiContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.primaryLight,
+  iconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
     marginRight: 16,
   },
-  emoji: {
-    fontSize: 28,
+  icon: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
   },
   cardContent: {
     flex: 1,
