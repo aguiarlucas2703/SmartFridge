@@ -164,9 +164,28 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 20,
     paddingBottom: 12,
+  },
+  hamburgerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 5,
+    marginRight: 16,
+  },
+  hamburgerLine: {
+    width: 22,
+    height: 2,
+    backgroundColor: colors.text,
+    borderRadius: 2,
+  },
+  headerTitleContainer: {
+    flex: 1,
   },
   title: {
     ...typography.styles.title,

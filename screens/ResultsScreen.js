@@ -252,8 +252,8 @@ export default function ResultsScreen({ route, navigation }) {
             return ['acai', 'maracuja', 'passion fruit', 'mandioca', 'macaxeira', 'aipim', 'cassava', 'goiaba', 'guava', 'farofa', 'pao de queijo', 'cupuacu', 'pequi', 'jambu', 'tucupi', 'quiabo', 'jilo', 'jabuticaba', 'umbu', 'caju'].includes(i);
           }) ? (
             <>
-              <Text style={styles.emptyEmoji}>🇧🇷</Text>
-              <Text style={styles.emptyTitle}>Ingrediente Brasileiro faltante...</Text>
+              <Image source={require('../assets/icons/icon_brazil.png')} style={styles.emptyIcon} />
+              <Text style={styles.emptyTitle}>Ingrediente Brasileiro</Text>
               <Text style={styles.emptyText}>
                 Sentimos muito. Sabemos bem o quão rica e extensa é a culinária e os ingredientes brasileiros. Infelizmente o TheMealDB não possui em sua base receitas com esse tipo de ingrediente.
               </Text>
@@ -443,12 +443,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 40,
-    gap: 12,
+    paddingHorizontal: 32,
+    marginTop: 40,
+  },
+  emptyIcon: {
+    width: 64,
+    height: 64,
+    marginBottom: 16,
+    resizeMode: 'contain',
   },
   emptyEmoji: {
-    fontSize: 64,
-    marginBottom: 8,
+    fontSize: 48,
+    marginBottom: 16,
   },
   emptyTitle: {
     ...typography.styles.subtitle,
