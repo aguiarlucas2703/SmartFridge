@@ -70,8 +70,8 @@ function RecipeCard({ recipe, onPress }) {
     recipe.score >= 70
       ? colors.secondary
       : recipe.score >= 40
-      ? colors.accent
-      : colors.error;
+        ? colors.accent
+        : colors.error;
 
   return (
     <Animated.View style={[styles.card, { transform: [{ scale }] }]}>
@@ -247,11 +247,26 @@ export default function ResultsScreen({ route, navigation }) {
       ) : recipes.length === 0 ? (
         // Estado vazio
         <View style={styles.emptyState}>
-          <Text style={styles.emptyEmoji}>🔍</Text>
-          <Text style={styles.emptyTitle}>Nenhuma receita encontrada</Text>
-          <Text style={styles.emptyText}>
-            Tente adicionar mais ingredientes à sua despensa.
-          </Text>
+          {ingredients.some(ing => {
+            const i = ing.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return ['acai', 'maracuja', 'passion fruit', 'mandioca', 'macaxeira', 'aipim', 'cassava', 'goiaba', 'guava', 'farofa', 'pao de queijo', 'cupuacu', 'pequi', 'jambu', 'tucupi', 'quiabo', 'jilo', 'jabuticaba', 'umbu', 'caju'].includes(i);
+          }) ? (
+            <>
+              <Text style={styles.emptyEmoji}>🇧🇷</Text>
+              <Text style={styles.emptyTitle}>Ingrediente Brasileiro faltante...</Text>
+              <Text style={styles.emptyText}>
+                Sentimos muito. Sabemos bem o quão rica e extensa é a culinária e os ingredientes brasileiros. Infelizmente o TheMealDB não possui em sua base receitas com esse tipo de ingrediente.
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.emptyEmoji}>🔍</Text>
+              <Text style={styles.emptyTitle}>Nenhuma receita encontrada</Text>
+              <Text style={styles.emptyText}>
+                Tente adicionar mais ingredientes à sua despensa.
+              </Text>
+            </>
+          )}
           <TouchableOpacity style={styles.retryBtn} onPress={() => navigation.goBack()}>
             <Text style={styles.retryText}>Voltar à Despensa</Text>
           </TouchableOpacity>

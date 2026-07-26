@@ -64,9 +64,12 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Tagline */}
-        <Text style={styles.tagline}>
-          O que vamos cozinhar{'\n'}hoje? 🍴
-        </Text>
+        <View style={styles.taglineContainer}>
+          <Text style={styles.tagline}>
+            O que vamos cozinhar{'\n'}hoje?
+          </Text>
+          <Image source={require('../assets/icons/icon_vegan.png')} style={styles.taglineIcon} />
+        </View>
 
         {/* Cards de stats */}
         <View style={styles.statsRow}>
@@ -191,12 +194,23 @@ const styles = StyleSheet.create({
   avatarBadgeText: {
     fontSize: 28,
   },
+  taglineContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginBottom: 28,
+    marginTop: 4,
+  },
   tagline: {
     ...typography.styles.hero,
     color: colors.text,
-    marginTop: 4,
-    marginBottom: 28,
     lineHeight: 42,
+  },
+  taglineIcon: {
+    width: 42,
+    height: 42,
+    marginLeft: 12,
+    marginBottom: 6,
+    resizeMode: 'contain',
   },
   statsRow: {
     flexDirection: 'row',

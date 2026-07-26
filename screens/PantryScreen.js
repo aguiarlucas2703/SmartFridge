@@ -29,7 +29,7 @@ import MenuDrawer from '../components/MenuDrawer';
 const PRESET_INGREDIENTS = {
   '🥩 Proteínas': [
     'chicken', 'chicken breast', 'ground beef', 'beef', 'pork',
-    'egg', 'tuna', 'salmon', 'shrimp', 'bacon', 'lamb',
+    'egg', 'tuna', 'salmon', 'shrimp', 'fish', 'bacon', 'lamb',
   ],
   '🫘 Leguminosas': [
     'kidney beans', 'black beans', 'chickpeas', 'lentils', 'pinto beans',
