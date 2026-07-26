@@ -24,7 +24,7 @@ export default function App() {
         {/* ProfileProvider envolve FavoritesProvider para que ambos sejam acessíveis */}
         <ProfileProvider>
           <FavoritesProvider>
-            <StatusBar style="dark" backgroundColor="#F4F6EF" />
+            <StatusBar style="dark" backgroundColor="#254fdb" />
             <RootNavigator />
           </FavoritesProvider>
         </ProfileProvider>

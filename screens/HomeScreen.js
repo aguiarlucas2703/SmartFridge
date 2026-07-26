@@ -1,7 +1,7 @@
 // SmartFridge — HomeScreen
 // Tela inicial do app: saudação personalizada, stats rápidos e acesso rápido à despensa.
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -15,10 +15,12 @@ import { useProfile } from '../context/ProfileContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import MenuDrawer from '../components/MenuDrawer';
 
 export default function HomeScreen({ navigation }) {
   const { profile, pantry } = useProfile();
   const { favorites } = useFavorites();
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   // Hora do dia para saudação contextual
   const getGreeting = () => {
@@ -39,10 +41,22 @@ export default function HomeScreen({ navigation }) {
       >
         {/* Header com avatar e saudação */}
         <View style={styles.header}>
-          <View>
+          {/* Botão hamburger */}
+          <TouchableOpacity
+            style={styles.hamburgerBtn}
+            onPress={() => setDrawerVisible(true)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <View style={styles.hamburgerLine} />
+            <View style={[styles.hamburgerLine, { width: 18 }]} />
+            <View style={styles.hamburgerLine} />
+          </TouchableOpacity>
+
+          <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.greeting}>{getGreeting()},</Text>
             <Text style={styles.name}>{profile?.name} {profile?.avatarEmoji}</Text>
           </View>
+
           <View style={styles.avatarBadge}>
             <Text style={styles.avatarBadgeText}>{profile?.avatarEmoji}</Text>
           </View>
@@ -129,6 +143,13 @@ export default function HomeScreen({ navigation }) {
           </Text>
         </View>
       </ScrollView>
+
+      {/* Drawer lateral */}
+      <MenuDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 }
@@ -147,8 +168,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 8,
   },
   greeting: {
@@ -200,7 +220,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: 'rgba(255,255,255,0.8)',
+    color: 'rgba(241, 218, 218, 0.8)',
     textAlign: 'center',
   },
   ctaButton: {
@@ -292,5 +312,18 @@ const styles = StyleSheet.create({
     ...typography.styles.caption,
     color: colors.text,
     lineHeight: 18,
+  },
+  hamburgerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 5,
+  },
+  hamburgerLine: {
+    width: 22,
+    height: 2,
+    backgroundColor: colors.text,
+    borderRadius: 2,
   },
 });

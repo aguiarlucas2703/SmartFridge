@@ -3,7 +3,7 @@
 
 export const colors = {
   // === Paleta principal ===
-  background: '#F4F6EF',   // Fundo geral
+  background: '#edf1e2',   // Fundo geral
   primary: '#1F4B3F',      // Headers, botões principais, textos de destaque
   secondary: '#4C8C6B',    // Chips selecionados, badges, ícones
   accent: '#D9A441',       // % compatibilidade, favorito ativo, CTAs secundários
@@ -14,6 +14,7 @@ export const colors = {
   border: '#DDE5D8',       // Divisores e bordas sutis
   error: '#C0392B',        // Estados de erro
   textMuted: '#6B8C7A',    // Textos secundários / placeholders
+  textSecondary: '#3D5C4A', // Textos de suporte (mais escuro que muted)
   textOnPrimary: '#FFFFFF',// Texto sobre fundo verde escuro
 
   // === Transparências (úteis para overlays) ===

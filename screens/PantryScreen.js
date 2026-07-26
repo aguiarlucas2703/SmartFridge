@@ -23,23 +23,38 @@ import { typography } from '../theme/typography';
 import { translateIngredient } from '../services/translator';
 
 // === Ingredientes pré-definidos agrupados por categoria ===
+// IMPORTANTE: as chaves são os nomes EXATOS que a TheMealDB aceita (validados via API).
+// Os rótulos PT-BR são aplicados pela função translateIngredient() na renderização.
 const PRESET_INGREDIENTS = {
   '🥩 Proteínas': [
-    'chicken', 'beef', 'pork', 'egg', 'tuna', 'salmon', 'shrimp', 'bacon',
+    'chicken', 'chicken breast', 'ground beef', 'beef', 'pork',
+    'egg', 'tuna', 'salmon', 'shrimp', 'bacon', 'lamb',
+  ],
+  '🫘 Leguminosas': [
+    'kidney beans', 'black beans', 'chickpeas', 'lentils', 'pinto beans',
   ],
   '🥦 Vegetais': [
-    'tomato', 'onion', 'garlic', 'potato', 'carrot', 'broccoli', 'spinach',
-    'pepper', 'mushroom', 'corn', 'cucumber', 'lettuce',
+    'tomato', 'onion', 'garlic', 'potatoes', 'carrot', 'broccoli',
+    'spinach', 'red pepper', 'green pepper', 'mushrooms', 'cucumber',
+    'lettuce', 'zucchini', 'aubergine', 'celery', 'leek', 'spring onions',
   ],
-  '🌾 Carboidratos': [
-    'rice', 'pasta', 'bread', 'flour', 'oats', 'noodles',
+  '🌾 Grãos & Carboidratos': [
+    'rice', 'bread', 'flour', 'oats', 'noodles', 'yeast',
   ],
   '🧀 Laticínios': [
-    'milk', 'cheese', 'butter', 'cream', 'yogurt',
+    'milk', 'cheese', 'parmesan', 'cheddar cheese',
+    'butter', 'double cream', 'sour cream', 'yogurt',
+  ],
+  '🍫 Chocolate & Doces': [
+    'dark chocolate', 'milk chocolate', 'chocolate chips', 'cocoa powder',
+    'vanilla', 'sugar', 'honey',
   ],
   '🫙 Temperos & Molhos': [
-    'salt', 'pepper', 'olive oil', 'soy sauce', 'vinegar', 'sugar',
-    'lemon', 'lime', 'honey', 'cumin', 'paprika', 'cinnamon',
+    'salt', 'black pepper', 'olive oil', 'vegetable oil',
+    'soy sauce', 'vinegar', 'lemon', 'ginger', 'cinnamon',
+    'cumin', 'paprika', 'turmeric', 'cayenne pepper', 'oregano',
+    'basil', 'thyme', 'rosemary', 'parsley', 'coriander',
+    'baking powder',
   ],
 };
 
@@ -128,9 +143,15 @@ export default function PantryScreen({ navigation }) {
   };
 
   // Filtra ingredientes pré-definidos pelo search
+  // Compara contra o nome em inglês (chave da API) E o rótulo PT-BR exibido ao usuário.
+  // Ex.: digitar "frango" encontra "chicken", "feijão" encontra "kidney beans".
   const getFilteredPresets = (category, items) => {
     if (!searchQuery) return items;
-    return items.filter((i) => i.toLowerCase().includes(searchQuery.toLowerCase()));
+    const q = searchQuery.toLowerCase().trim();
+    return items.filter((i) => {
+      const ptLabel = translateIngredient(i).toLowerCase();
+      return i.toLowerCase().includes(q) || ptLabel.includes(q);
+    });
   };
 
   const selectedCount = selected.size;
