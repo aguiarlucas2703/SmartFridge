@@ -34,7 +34,8 @@ export default function TipsScreen({ navigation }) {
           <View style={styles.hamburgerLine} />
         </TouchableOpacity>
         <Text style={styles.title}>Dicas Anti-desperdício</Text>
-        <View style={{ width: 36 }} /> {/* Spacer to center title */}
+        {/* Spacer to center title */}
+        <View style={{ width: 36 }} />
       </View>
 
       <ScrollView
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   title: {
-    ...typography.h2,
+    ...typography.styles.title,
     color: colors.primary,
   },
   scroll: {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   subtitle: {
-    ...typography.body,
+    ...typography.styles.body,
     color: colors.textSecondary,
     marginBottom: 24,
     lineHeight: 24,
@@ -155,12 +156,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardTitle: {
-    ...typography.h3,
+    ...typography.styles.subtitle,
     color: colors.primary,
     marginBottom: 4,
   },
   cardDescription: {
-    ...typography.body,
+    ...typography.styles.body,
     color: colors.textMuted,
     fontSize: 14,
   },

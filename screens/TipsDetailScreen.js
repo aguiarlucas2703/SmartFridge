@@ -26,7 +26,8 @@ export default function TipsDetailScreen({ route, navigation }) {
           <Text style={styles.backEmoji}>←</Text>
         </TouchableOpacity>
         <Text style={styles.title} numberOfLines={1}>{category.title}</Text>
-        <View style={{ width: 36 }} /> {/* Spacer */}
+        {/* Spacer */}
+        <View style={{ width: 36 }} />
       </View>
 
       <ScrollView
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     textAlign: 'center',
-    ...typography.h3,
+    ...typography.styles.subtitle,
     color: colors.primary,
   },
   scroll: {
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   heroDescription: {
-    ...typography.body,
+    ...typography.styles.body,
     textAlign: 'center',
     color: colors.textSecondary,
     fontSize: 16,
@@ -147,12 +148,12 @@ const styles = StyleSheet.create({
   },
   tipTitle: {
     flex: 1,
-    ...typography.h3,
+    ...typography.styles.subtitle,
     color: colors.primary,
     fontSize: 18,
   },
   tipContent: {
-    ...typography.body,
+    ...typography.styles.body,
     color: colors.text,
     lineHeight: 24,
   },

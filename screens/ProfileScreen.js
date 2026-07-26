@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   title: {
-    ...typography.h2,
+    ...typography.styles.title,
     color: colors.primary,
   },
   scroll: {

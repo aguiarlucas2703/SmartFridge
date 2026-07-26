@@ -55,7 +55,7 @@ const PRESET_INGREDIENTS = {
     'soy sauce', 'vinegar', 'lemon', 'ginger', 'cinnamon',
     'cumin', 'paprika', 'turmeric', 'cayenne pepper', 'oregano',
     'basil', 'thyme', 'rosemary', 'parsley', 'coriander',
-    'baking powder',
+    'baking powder'
   ],
 };
 
@@ -91,7 +91,7 @@ function IngredientChip({ label, selected, onPress }) {
 
 export default function PantryScreen({ navigation }) {
   const { pantry, savePantry } = useProfile();
-  
+
   // Estados do drawer
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [selected, setSelected] = useState(() => new Set(pantry));
@@ -131,9 +131,6 @@ export default function PantryScreen({ navigation }) {
     });
   };
 
-  const handleSearch = () => {
-    // Filtra todos os ingredientes pré-definidos pelo query
-  };
 
   const handleFindRecipes = async () => {
     const ingredients = Array.from(selected);
@@ -216,12 +213,11 @@ export default function PantryScreen({ navigation }) {
               <View style={styles.chipRow}>
                 {customIngredients.map((item) => (
                   <View key={item} style={styles.customChipWrapper}>
-                    <TouchableOpacity
-                      style={[styles.chip, styles.chipSelected]}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={styles.chipTextSelected}>✓ {item}</Text>
-                    </TouchableOpacity>
+                    <IngredientChip
+                      label={item}
+                      selected={selected.has(item)}
+                      onPress={() => toggleIngredient(item)}
+                    />
                     <TouchableOpacity
                       onPress={() => removeCustomIngredient(item)}
                       style={styles.removeBtn}
@@ -255,25 +251,41 @@ export default function PantryScreen({ navigation }) {
           </View>
 
           {/* Categorias de ingredientes pré-definidos */}
-          {Object.entries(PRESET_INGREDIENTS).map(([category, items]) => {
-            const filtered = getFilteredPresets(category, items);
-            if (filtered.length === 0) return null;
-            return (
-              <View key={category} style={styles.section}>
-                <Text style={styles.sectionLabel}>{category.toUpperCase()}</Text>
-                <View style={styles.chipRow}>
-                  {filtered.map((item) => (
-                    <IngredientChip
-                      key={item}
-                      label={item}
-                      selected={selected.has(item)}
-                      onPress={() => toggleIngredient(item)}
-                    />
-                  ))}
+          {(() => {
+            let hasResults = false;
+            const sections = Object.entries(PRESET_INGREDIENTS).map(([category, items]) => {
+              const filtered = getFilteredPresets(category, items);
+              if (filtered.length === 0) return null;
+              hasResults = true;
+              return (
+                <View key={category} style={styles.section}>
+                  <Text style={styles.sectionLabel}>{category.toUpperCase()}</Text>
+                  <View style={styles.chipRow}>
+                    {filtered.map((item) => (
+                      <IngredientChip
+                        key={item}
+                        label={item}
+                        selected={selected.has(item)}
+                        onPress={() => toggleIngredient(item)}
+                      />
+                    ))}
+                  </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            });
+
+            if (!hasResults && searchQuery.length > 0) {
+              return (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyEmoji}>🔍</Text>
+                  <Text style={styles.emptyTitle}>
+                    Nenhum ingrediente encontrado para "{searchQuery}"
+                  </Text>
+                </View>
+              );
+            }
+            return sections;
+          })()}
 
           <View style={{ height: 100 }} />
         </ScrollView>
@@ -335,7 +347,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    ...typography.h2,
+    ...typography.styles.title,
     color: colors.primary,
   },
   subtitle: {
@@ -487,5 +499,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.2,
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  emptyEmoji: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    ...typography.styles.subtitle,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
 });

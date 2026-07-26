@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
 
   // Navegação
   sectionLabel: {
-    ...typography.caption,
+    ...typography.styles.caption,
     color: colors.textMuted,
     letterSpacing: 1.2,
     paddingHorizontal: 20,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   navText: {
-    ...typography.body,
+    ...typography.styles.body,
     color: colors.text,
     fontWeight: '500',
   },
@@ -333,13 +333,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sobreTitle: {
-    ...typography.label,
+    ...typography.styles.label,
     color: colors.text,
     fontWeight: '700',
     marginBottom: 4,
   },
   sobreText: {
-    ...typography.caption,
+    ...typography.styles.caption,
     color: colors.textSecondary,
     lineHeight: 18,
   },
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   },
   featureIcon: { fontSize: 15 },
   featureText: {
-    ...typography.caption,
+    ...typography.styles.caption,
     color: colors.textSecondary,
     flex: 1,
   },
@@ -373,17 +373,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   autoriaLabel: {
-    ...typography.caption,
+    ...typography.styles.caption,
     color: colors.textMuted,
     marginBottom: 4,
   },
   autoriaName: {
-    ...typography.h3,
+    ...typography.styles.subtitle,
     color: colors.text,
     fontWeight: '800',
   },
   autoriaCourse: {
-    ...typography.caption,
+    ...typography.styles.caption,
     color: colors.textMuted,
     marginTop: 2,
     marginBottom: 12,
