@@ -1,0 +1,167 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../theme/colors';
+import { typography } from '../theme/typography';
+import { tipsCategories } from '../data/tips';
+import MenuDrawer from '../components/MenuDrawer';
+
+export default function TipsScreen({ navigation }) {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const handleCategoryPress = (category) => {
+    navigation.navigate('TipsDetail', { category });
+  };
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      {/* Header com Menu Sanduíche */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.hamburgerBtn}
+          onPress={() => setDrawerVisible(true)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <View style={styles.hamburgerLine} />
+          <View style={[styles.hamburgerLine, { width: 18 }]} />
+          <View style={styles.hamburgerLine} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Dicas Anti-desperdício</Text>
+        <View style={{ width: 36 }} /> {/* Spacer to center title */}
+      </View>
+
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.subtitle}>
+          Pequenas mudanças no dia a dia podem reduzir drasticamente o desperdício de alimentos. Explore nossas dicas:
+        </Text>
+
+        <View style={styles.categoriesContainer}>
+          {tipsCategories.map((category) => (
+            <TouchableOpacity
+              key={category.id}
+              style={styles.categoryCard}
+              activeOpacity={0.8}
+              onPress={() => handleCategoryPress(category)}
+            >
+              <View style={styles.emojiContainer}>
+                <Text style={styles.emoji}>{category.emoji}</Text>
+              </View>
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{category.title}</Text>
+                <Text style={styles.cardDescription}>{category.description}</Text>
+              </View>
+              <Text style={styles.chevron}>›</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+
+      {/* Menu Sanduíche Global */}
+      <MenuDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 16,
+  },
+  hamburgerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 5,
+  },
+  hamburgerLine: {
+    width: 22,
+    height: 2,
+    backgroundColor: colors.text,
+    borderRadius: 2,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.primary,
+  },
+  scroll: {
+    flex: 1,
+  },
+  container: {
+    padding: 24,
+    paddingTop: 8,
+  },
+  subtitle: {
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: 24,
+    lineHeight: 24,
+  },
+  categoriesContainer: {
+    gap: 16,
+  },
+  categoryCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    padding: 16,
+    borderRadius: 16,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 2,
+  },
+  emojiContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  emoji: {
+    fontSize: 28,
+  },
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    ...typography.h3,
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  cardDescription: {
+    ...typography.body,
+    color: colors.textMuted,
+    fontSize: 14,
+  },
+  chevron: {
+    fontSize: 24,
+    color: colors.border,
+    marginLeft: 8,
+  },
+});

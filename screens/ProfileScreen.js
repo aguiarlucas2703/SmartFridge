@@ -16,10 +16,12 @@ import { useProfile } from '../context/ProfileContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import MenuDrawer from '../components/MenuDrawer';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const { profile, pantry, logout } = useProfile();
   const { favorites } = useFavorites();
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = () => {
@@ -48,6 +50,21 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.hamburgerBtn}
+          onPress={() => setDrawerVisible(true)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <View style={styles.hamburgerLine} />
+          <View style={[styles.hamburgerLine, { width: 18 }]} />
+          <View style={styles.hamburgerLine} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Meu Perfil</Text>
+        <View style={{ width: 36 }} />
+      </View>
+
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.container}
@@ -112,6 +129,13 @@ export default function ProfileScreen() {
 
         <Text style={styles.version}>SmartFridge v1.0 · N1-2</Text>
       </ScrollView>
+
+      {/* Menu Sanduíche Global */}
+      <MenuDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 }
@@ -120,6 +144,32 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 8,
+    backgroundColor: colors.background,
+  },
+  hamburgerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 5,
+  },
+  hamburgerLine: {
+    width: 22,
+    height: 2,
+    backgroundColor: colors.text,
+    borderRadius: 2,
+  },
+  title: {
+    ...typography.h2,
+    color: colors.primary,
   },
   scroll: {
     flex: 1,

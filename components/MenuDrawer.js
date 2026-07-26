@@ -110,7 +110,7 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
             <Text style={styles.navText}>Início</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Pantry')}>
+          <TouchableOpacity style={styles.navItem} onPress={() => handleNav('PantryTab')}>
             <Text style={styles.navEmoji}>🧺</Text>
             <View style={styles.navRight}>
               <Text style={styles.navText}>Minha Despensa</Text>

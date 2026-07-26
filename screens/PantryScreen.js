@@ -21,6 +21,7 @@ import { useProfile } from '../context/ProfileContext';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { translateIngredient } from '../services/translator';
+import MenuDrawer from '../components/MenuDrawer';
 
 // === Ingredientes pré-definidos agrupados por categoria ===
 // IMPORTANTE: as chaves são os nomes EXATOS que a TheMealDB aceita (validados via API).
@@ -90,6 +91,9 @@ function IngredientChip({ label, selected, onPress }) {
 
 export default function PantryScreen({ navigation }) {
   const { pantry, savePantry } = useProfile();
+  
+  // Estados do drawer
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [selected, setSelected] = useState(() => new Set(pantry));
   const [searchQuery, setSearchQuery] = useState('');
   const [customInput, setCustomInput] = useState('');
@@ -164,7 +168,16 @@ export default function PantryScreen({ navigation }) {
       >
         {/* Header fixo */}
         <View style={styles.header}>
-          <View>
+          <TouchableOpacity
+            style={styles.hamburgerBtn}
+            onPress={() => setDrawerVisible(true)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <View style={styles.hamburgerLine} />
+            <View style={[styles.hamburgerLine, { width: 18 }]} />
+            <View style={styles.hamburgerLine} />
+          </TouchableOpacity>
+          <View style={styles.headerTitleContainer}>
             <Text style={styles.title}>Minha Despensa</Text>
             <Text style={styles.subtitle}>
               {selectedCount > 0
@@ -172,7 +185,6 @@ export default function PantryScreen({ navigation }) {
                 : 'Selecione o que você tem em casa'}
             </Text>
           </View>
-          <Text style={styles.pantryIcon}>🧺</Text>
         </View>
 
         {/* Barra de busca */}
@@ -281,6 +293,13 @@ export default function PantryScreen({ navigation }) {
           </View>
         )}
       </KeyboardAvoidingView>
+
+      {/* Menu Sanduíche Global */}
+      <MenuDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 }
@@ -292,14 +311,31 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 12,
+    padding: 24,
+    paddingTop: 16,
+    paddingBottom: 16,
+    backgroundColor: colors.surface,
+  },
+  hamburgerBtn: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 5,
+    marginRight: 16,
+  },
+  hamburgerLine: {
+    width: 22,
+    height: 2,
+    backgroundColor: colors.text,
+    borderRadius: 2,
+  },
+  headerTitleContainer: {
+    flex: 1,
   },
   title: {
-    ...typography.styles.title,
+    ...typography.h2,
     color: colors.primary,
   },
   subtitle: {

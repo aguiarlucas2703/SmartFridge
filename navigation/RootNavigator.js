@@ -19,6 +19,8 @@ import ResultsScreen from '../screens/ResultsScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import TipsScreen from '../screens/TipsScreen';
+import TipsDetailScreen from '../screens/TipsDetailScreen';
 
 // === Ícones SVG simples como componentes (sem dependência extra) ===
 import { Text } from 'react-native';
@@ -42,6 +44,16 @@ function PantryStack() {
       <Stack.Screen name="Pantry" component={PantryScreen} />
       <Stack.Screen name="Results" component={ResultsScreen} />
       <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} />
+    </Stack.Navigator>
+  );
+}
+
+// Stack interno da aba de Dicas
+function TipsStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TipsHub" component={TipsScreen} />
+      <Stack.Screen name="TipsDetail" component={TipsDetailScreen} />
     </Stack.Navigator>
   );
 }
@@ -72,6 +84,14 @@ function MainTabs() {
         options={{
           tabBarLabel: 'Despensa',
           tabBarIcon: ({ focused }) => <TabIcon emoji="🧺" focused={focused} />,
+        }}
+      />
+      <Tab.Screen
+        name="TipsTab"
+        component={TipsStack}
+        options={{
+          tabBarLabel: 'Dicas',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
         }}
       />
       <Tab.Screen

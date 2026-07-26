@@ -1,7 +1,7 @@
 // SmartFridge — FavoritesScreen
 // Lista de receitas salvas pelo usuário, com acesso rápido ao detalhe.
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFavorites } from '../context/FavoritesContext';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+import MenuDrawer from '../components/MenuDrawer';
 
 function FavoriteCard({ recipe, onPress, onRemove }) {
   const detail = recipe.detail;
@@ -82,6 +83,7 @@ function EmptyState({ onGoToPantry }) {
 
 export default function FavoritesScreen({ navigation }) {
   const { favorites, toggleFavorite } = useFavorites();
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   const handleRemove = (recipe) => {
     Alert.alert(
@@ -109,12 +111,23 @@ export default function FavoritesScreen({ navigation }) {
     <SafeAreaView style={styles.safe}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Meus Favoritos ❤️</Text>
-        <Text style={styles.subtitle}>
-          {favorites.length > 0
-            ? `${favorites.length} receita${favorites.length > 1 ? 's' : ''} salva${favorites.length > 1 ? 's' : ''}`
-            : 'Nenhuma receita salva'}
-        </Text>
+        <TouchableOpacity
+          style={styles.hamburgerBtn}
+          onPress={() => setDrawerVisible(true)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <View style={styles.hamburgerLine} />
+          <View style={[styles.hamburgerLine, { width: 18 }]} />
+          <View style={styles.hamburgerLine} />
+        </TouchableOpacity>
+        <View style={styles.headerTitleContainer}>
+          <Text style={styles.title}>Meus Favoritos ❤️</Text>
+          <Text style={styles.subtitle}>
+            {favorites.length > 0
+              ? `${favorites.length} receita${favorites.length > 1 ? 's' : ''} salva${favorites.length > 1 ? 's' : ''}`
+              : 'Nenhuma receita salva'}
+          </Text>
+        </View>
       </View>
 
       {favorites.length === 0 ? (
@@ -134,6 +147,13 @@ export default function FavoritesScreen({ navigation }) {
           )}
         />
       )}
+
+      {/* Menu Sanduíche Global */}
+      <MenuDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 }
