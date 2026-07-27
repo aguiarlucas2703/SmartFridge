@@ -9,7 +9,7 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  Animated,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
@@ -72,11 +72,22 @@ export default function ProfileScreen({ navigation }) {
       >
         {/* Avatar e nome */}
         <View style={styles.profileHeader}>
-          <View style={styles.avatarCircle}>
-            <Text style={styles.avatarEmoji}>{profile?.avatarEmoji}</Text>
+          <View style={[styles.avatarCircle, profile?.photoUri && { borderWidth: 0 }]}>
+            {profile?.photoUri ? (
+              <Image source={{ uri: profile.photoUri }} style={styles.avatarImage} />
+            ) : (
+              <Text style={styles.avatarEmoji}>{profile?.avatarEmoji}</Text>
+            )}
           </View>
           <Text style={styles.name}>{profile?.name}</Text>
           <Text style={styles.userTag}>Usuário SmartFridge</Text>
+
+          <TouchableOpacity
+            style={styles.editProfileBtn}
+            onPress={() => navigation.navigate('EditProfile')}
+          >
+            <Text style={styles.editProfileText}>Editar Perfil</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Stats */}
@@ -197,6 +208,25 @@ const styles = StyleSheet.create({
   },
   avatarEmoji: {
     fontSize: 52,
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 50,
+  },
+  editProfileBtn: {
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  editProfileText: {
+    ...typography.styles.caption,
+    color: colors.primary,
+    fontWeight: '600',
   },
   name: {
     ...typography.styles.title,

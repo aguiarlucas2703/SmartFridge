@@ -19,6 +19,7 @@ import ResultsScreen from '../screens/ResultsScreen';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 import TipsScreen from '../screens/TipsScreen';
 import TipsDetailScreen from '../screens/TipsDetailScreen';
 
@@ -91,6 +92,16 @@ function TipsStack() {
   );
 }
 
+// Stack interno da aba de Perfil
+function ProfileStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+    </Stack.Navigator>
+  );
+}
+
 // Bottom Tab Navigator — app principal (após login)
 function MainTabs() {
   return (
@@ -137,7 +148,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ focused }) => <TabIcon emoji="👤" focused={focused} />, // Keep emoji since we only have 4 icons

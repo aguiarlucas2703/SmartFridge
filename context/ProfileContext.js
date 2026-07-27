@@ -42,8 +42,8 @@ export function ProfileProvider({ children }) {
   }, []);
 
   // --- Criar perfil ---
-  const createProfile = useCallback(async ({ name, avatarEmoji }) => {
-    const newProfile = { name: name.trim(), avatarEmoji };
+  const createProfile = useCallback(async ({ name, avatarEmoji, photoUri = null }) => {
+    const newProfile = { name: name.trim(), avatarEmoji, photoUri };
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(newProfile));
       setProfile(newProfile);
@@ -51,6 +51,20 @@ export function ProfileProvider({ children }) {
       console.error('[ProfileContext] Erro ao salvar perfil:', error);
       throw error; // propaga para a tela tratar com feedback ao usuário
     }
+  }, []);
+
+  // --- Atualizar perfil ---
+  const updateProfile = useCallback(async (data) => {
+    setProfile(current => {
+      const newProfile = { ...current, ...data };
+      if (newProfile.name) newProfile.name = newProfile.name.trim();
+      
+      AsyncStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(newProfile)).catch(
+        (e) => console.error('[ProfileContext] Erro ao atualizar perfil:', e)
+      );
+      
+      return newProfile;
+    });
   }, []);
 
   // --- Logout (limpa perfil mas mantém despensa) ---
@@ -106,6 +120,7 @@ export function ProfileProvider({ children }) {
     pantry,
     isLoading,
     createProfile,
+    updateProfile,
     logout,
     savePantry,
     addIngredient,

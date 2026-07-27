@@ -27,7 +27,7 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
   const translateX = useRef(new Animated.Value(-DRAWER_WIDTH)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
-  const { pantry } = useProfile();
+  const { pantry, profile } = useProfile();
   const { favorites } = useFavorites();
 
   useEffect(() => {
@@ -140,7 +140,11 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Profile')}>
-            <Text style={styles.navEmoji}>👤</Text>
+            {profile?.photoUri ? (
+              <Image source={{ uri: profile.photoUri }} style={styles.navPhoto} />
+            ) : (
+              <Text style={styles.navEmoji}>{profile?.avatarEmoji || '👤'}</Text>
+            )}
             <Text style={styles.navText}>Perfil</Text>
           </TouchableOpacity>
 
@@ -290,9 +294,18 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   navEmoji: {
-    fontSize: 18,
+    fontSize: 22,
     width: 24,
     textAlign: 'center',
+    marginRight: 16,
+  },
+  navPhoto: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    marginRight: 16,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   navText: {
     ...typography.styles.body,

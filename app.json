@@ -11,20 +11,25 @@
       "resizeMode": "contain",
       "backgroundColor": "#edf1e2"
     },
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.smartfridge.app"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#edf1e2"
-      },
-      "package": "com.smartfridge.app"
-    },
     "web": {
       "favicon": "./assets/logo.png"
     },
-    "plugins": []
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Usado para você escolher uma foto de perfil.",
+          "cameraPermission": "Usado para você tirar uma foto de perfil."
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.smartfridge.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Usado para você escolher uma foto de perfil.",
+        "NSCameraUsageDescription": "Usado para você tirar uma foto de perfil."
+      }
+    }
   }
 }
