@@ -14,12 +14,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { useProfile } from '../context/ProfileContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 
 const AVATARS = ['🧑‍🍳', '👩‍🍳', '🧑', '👩', '👨', '🐱', '🦊', '🐸', '🌻', '🍕', '🥑', '🍜'];
 
 export default function EditProfileScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { profile, updateProfile } = useProfile();
   
   const [name, setName] = useState(profile?.name || '');
@@ -181,7 +183,7 @@ export default function EditProfileScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -317,3 +319,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 });
+
+

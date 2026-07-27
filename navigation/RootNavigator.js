@@ -9,7 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useProfile } from '../context/ProfileContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 
 // === Screens ===
 import CreateProfileScreen from '../screens/CreateProfileScreen';
@@ -104,6 +104,8 @@ function ProfileStack() {
 
 // Bottom Tab Navigator — app principal (após login)
 function MainTabs() {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -160,6 +162,8 @@ function MainTabs() {
 
 // Tela de loading (enquanto lê AsyncStorage na inicialização)
 function LoadingScreen() {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <View style={styles.loading}>
       <ActivityIndicator size="large" color={colors.primary} />
@@ -188,7 +192,7 @@ export default function RootNavigator() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   loading: {
     flex: 1,
     justifyContent: 'center',

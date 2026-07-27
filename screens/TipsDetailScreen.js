@@ -8,11 +8,13 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import { useTips } from '../context/TipsContext';
 
 export default function TipsDetailScreen({ route, navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { category } = route.params;
   const { appliedTipIds, toggleTipApplied } = useTips();
 
@@ -38,7 +40,7 @@ export default function TipsDetailScreen({ route, navigation }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.heroSection}>
-          <Image source={category.icon} style={styles.heroIcon} />
+          <Image source={isDark && category.iconDark ? category.iconDark : category.icon} style={styles.heroIcon} />
           <Text style={styles.heroDescription}>{category.description}</Text>
         </View>
 
@@ -73,7 +75,7 @@ export default function TipsDetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -195,3 +197,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+

@@ -18,12 +18,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchRecipesByIngredients, fetchRecipeDetail } from '../services/mealdb';
 import { rankRecipes } from '../services/compatibility';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import { translateIngredient } from '../services/translator';
 
 // === Barra de progresso animada para % de compatibilidade ===
-function CompatibilityBar({ score }) {
+function CompatibilityBar({ score, styles, colors }) {
   const width = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function CompatibilityBar({ score }) {
 }
 
 // === Card de receita ===
-function RecipeCard({ recipe, onPress }) {
+function RecipeCard({ recipe, onPress, styles, colors }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePress = () => {
@@ -107,7 +107,7 @@ function RecipeCard({ recipe, onPress }) {
               </Text>
             </View>
 
-            <CompatibilityBar score={recipe.score} />
+            <CompatibilityBar score={recipe.score} styles={styles} colors={colors} />
 
             <Text style={styles.ingredientCount}>
               {recipe.matching?.length ?? 0}/{recipe.total ?? '?'} ingredientes
@@ -123,7 +123,7 @@ function RecipeCard({ recipe, onPress }) {
 }
 
 // === Skeleton loading ===
-function SkeletonCard() {
+function SkeletonCard({ styles, colors }) {
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -148,6 +148,8 @@ function SkeletonCard() {
 }
 
 export default function ResultsScreen({ route, navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { ingredients } = route.params;
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -196,10 +198,6 @@ export default function ResultsScreen({ route, navigation }) {
   const handleRefresh = () => {
     setRefreshing(true);
     loadRecipes();
-  };
-
-  const handleRecipePress = (recipe) => {
-    navigation.navigate('RecipeDetail', { recipe });
   };
 
   const filteredRecipes = recipes.filter(recipe => {
@@ -259,7 +257,7 @@ export default function ResultsScreen({ route, navigation }) {
       {/* Conteúdo */}
       {isLoading ? (
         <View style={styles.listContent}>
-          {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
+          {[1, 2, 3].map((i) => <SkeletonCard key={i} styles={styles} colors={colors} />)}
         </View>
       ) : error ? (
         // Estado de erro
@@ -324,7 +322,12 @@ export default function ResultsScreen({ route, navigation }) {
             />
           }
           renderItem={({ item }) => (
-            <RecipeCard recipe={item} onPress={() => handleRecipePress(item)} />
+            <RecipeCard
+              styles={styles}
+              colors={colors}
+              recipe={item}
+              onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}
+            />
           )}
         />
       )}
@@ -332,7 +335,7 @@ export default function ResultsScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -549,3 +552,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+

@@ -20,12 +20,14 @@ import { useProfile } from '../context/ProfileContext';
 import { calculateCompatibility } from '../services/compatibility';
 import { extractIngredients, extractMeasures, fetchRecipeDetail } from '../services/mealdb';
 import { translateText, translateIngredient, translateCategory } from '../services/translator';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 
 const HERO_HEIGHT = 280;
 
 export default function RecipeDetailScreen({ route, navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { recipe: routeRecipe } = route.params;
   const { toggleFavorite, isFavorite } = useFavorites();
   const { pantry } = useProfile();
@@ -294,7 +296,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background,
@@ -512,3 +514,5 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
 });
+
+

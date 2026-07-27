@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import { tipsCategories } from '../data/tips';
 import MenuDrawer from '../components/MenuDrawer';
@@ -17,6 +17,8 @@ import { useTips } from '../context/TipsContext';
 import { getTipsMatchingPantry } from '../services/tipsMatcher';
 
 export default function TipsScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { pantry } = useProfile();
   const { appliedTipIds, totalTipsCount } = useTips();
@@ -100,7 +102,7 @@ export default function TipsScreen({ navigation }) {
               onPress={() => handleCategoryPress(category)}
             >
               <View style={styles.iconContainer}>
-                <Image source={category.icon} style={styles.icon} />
+                <Image source={isDark && category.iconDark ? category.iconDark : category.icon} style={styles.icon} />
               </View>
               <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{category.title}</Text>
@@ -122,7 +124,7 @@ export default function TipsScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -276,3 +278,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+

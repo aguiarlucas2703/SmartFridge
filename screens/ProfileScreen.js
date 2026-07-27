@@ -14,11 +14,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import MenuDrawer from '../components/MenuDrawer';
 
 export default function ProfileScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { profile, pantry, logout } = useProfile();
   const { favorites } = useFavorites();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -62,7 +64,7 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.hamburgerLine} />
         </TouchableOpacity>
         <Text style={styles.title}>Meu Perfil</Text>
-        <View style={{ width: 36 }} />
+        <TouchableOpacity onPress={toggleTheme} style={styles.themeBtn} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}><Image source={require('../assets/icons/icon_darkmode_2.png')} style={styles.themeIcon} /></TouchableOpacity>
       </View>
 
       <ScrollView
@@ -151,7 +153,7 @@ export default function ProfileScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -178,6 +180,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text,
     borderRadius: 2,
   },
+  themeBtn: { width: 36, height: 36, justifyContent: 'center', alignItems: 'flex-end' },
+  themeIcon: { width: 24, height: 24, resizeMode: 'contain' },
   title: {
     ...typography.styles.title,
     color: colors.primary,
@@ -332,3 +336,8 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
 });
+
+
+
+
+

@@ -14,11 +14,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import MenuDrawer from '../components/MenuDrawer';
 
 export default function HomeScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { profile, pantry } = useProfile();
   const { favorites } = useFavorites();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -157,7 +159,7 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -350,3 +352,5 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
 });
+
+

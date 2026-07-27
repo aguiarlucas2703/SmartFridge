@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import { translateIngredient } from '../services/translator';
 import MenuDrawer from '../components/MenuDrawer';
@@ -63,7 +63,7 @@ const ALL_PRESETS = Object.values(PRESET_INGREDIENTS).flat();
 
 // Componente de chip animado
 // label = chave em inglês (valor da API); exibe a tradução PT-BR para o usuário
-function IngredientChip({ label, selected, onPress }) {
+function IngredientChip({ label, selected, onPress, styles }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePress = () => {
@@ -90,6 +90,8 @@ function IngredientChip({ label, selected, onPress }) {
 }
 
 export default function PantryScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { pantry, savePantry } = useProfile();
 
   // Estados do drawer
@@ -140,7 +142,10 @@ export default function PantryScreen({ navigation }) {
         {
           text: 'Desmarcar',
           style: 'destructive',
-          onPress: () => setSelected(new Set()),
+          onPress: async () => {
+            setSelected(new Set());
+            await savePantry([]);
+          },
         },
       ]
     );
@@ -234,6 +239,7 @@ export default function PantryScreen({ navigation }) {
                 {customIngredients.map((item) => (
                   <View key={item} style={styles.customChipWrapper}>
                     <IngredientChip
+                      styles={styles}
                       label={item}
                       selected={selected.has(item)}
                       onPress={() => toggleIngredient(item)}
@@ -283,6 +289,7 @@ export default function PantryScreen({ navigation }) {
                   <View style={styles.chipRow}>
                     {filtered.map((item) => (
                       <IngredientChip
+                        styles={styles}
                         key={item}
                         label={item}
                         selected={selected.has(item)}
@@ -336,7 +343,7 @@ export default function PantryScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -546,3 +553,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+

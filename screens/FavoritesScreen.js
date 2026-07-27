@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFavorites } from '../context/FavoritesContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import MenuDrawer from '../components/MenuDrawer';
 
-function FavoriteCard({ recipe, onPress, onRemove }) {
+function FavoriteCard({ recipe, onPress, onRemove, styles }) {
   const detail = recipe.detail;
   const name = detail?.strMeal ?? recipe.strMeal;
   const thumb = detail?.strMealThumb ?? recipe.strMealThumb;
@@ -66,7 +66,7 @@ function FavoriteCard({ recipe, onPress, onRemove }) {
   );
 }
 
-function EmptyState({ onGoToPantry }) {
+function EmptyState({ onGoToPantry, styles }) {
   return (
     <View style={styles.empty}>
       <Text style={styles.emptyEmoji}>🤍</Text>
@@ -82,6 +82,8 @@ function EmptyState({ onGoToPantry }) {
 }
 
 export default function FavoritesScreen({ navigation }) {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { favorites, toggleFavorite } = useFavorites();
   const [drawerVisible, setDrawerVisible] = useState(false);
 
@@ -128,7 +130,7 @@ export default function FavoritesScreen({ navigation }) {
       </View>
 
       {favorites.length === 0 ? (
-        <EmptyState onGoToPantry={() => navigation.navigate('PantryTab')} />
+        <EmptyState styles={styles} onGoToPantry={() => navigation.navigate('PantryTab')} />
       ) : (
         <FlatList
           data={favorites}
@@ -137,6 +139,7 @@ export default function FavoritesScreen({ navigation }) {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <FavoriteCard
+              styles={styles}
               recipe={item}
               onPress={() => handlePress(item)}
               onRemove={() => handleRemove(item)}
@@ -155,7 +158,7 @@ export default function FavoritesScreen({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -297,3 +300,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
+

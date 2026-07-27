@@ -17,12 +17,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProfile } from '../context/ProfileContext';
-import { colors } from '../theme/colors';
+import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 
 const AVATARS = ['🧑‍🍳', '👩‍🍳', '🧑', '👩', '👨', '🐱', '🦊', '🐸', '🌻', '🍕', '🥑', '🍜'];
 
 export default function CreateProfileScreen() {
+  const { colors, isDark, toggleTheme } = useTheme();
+  const styles = getStyles(colors);
   const { createProfile } = useProfile();
   const [name, setName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
@@ -129,7 +131,7 @@ export default function CreateProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: colors.background,
@@ -237,3 +239,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 });
+
+

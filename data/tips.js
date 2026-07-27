@@ -6,6 +6,7 @@ export const tipsCategories = [
     id: 'storage',
     title: 'Armazenamento Correto',
     icon: require('../assets/icons/icon_fridge.png'),
+    iconDark: require('../assets/icons/icon_fridge_white.png'),
     description: 'Aprenda a guardar seus alimentos para que durem mais.',
     tips: [
       {
