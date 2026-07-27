@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   Image,
   RefreshControl,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { fetchRecipesByIngredients, fetchRecipeDetail } from '../services/mealdb';
@@ -152,6 +153,7 @@ export default function ResultsScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [filter, setFilter] = useState('All'); // 'All' | 'Vegetarian' | 'Vegan'
 
   const loadRecipes = async () => {
     setError(null);
@@ -200,6 +202,11 @@ export default function ResultsScreen({ route, navigation }) {
     navigation.navigate('RecipeDetail', { recipe });
   };
 
+  const filteredRecipes = recipes.filter(recipe => {
+    if (filter === 'All') return true;
+    return recipe.detail?.strCategory === filter;
+  });
+
   return (
     <SafeAreaView style={styles.safe}>
       {/* Header */}
@@ -229,6 +236,26 @@ export default function ResultsScreen({ route, navigation }) {
         )}
       </View>
 
+      {/* Filtro de Dieta */}
+      <View style={styles.filterBar}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
+          {['All', 'Vegetarian', 'Vegan'].map(f => {
+            const isSelected = filter === f;
+            const label = f === 'All' ? 'Todas' : f === 'Vegetarian' ? 'Vegetariano' : 'Vegano';
+            return (
+              <TouchableOpacity
+                key={f}
+                style={[styles.filterChip, isSelected && styles.filterChipActive]}
+                onPress={() => setFilter(f)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.filterText, isSelected && styles.filterTextActive]}>{label}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+
       {/* Conteúdo */}
       {isLoading ? (
         <View style={styles.listContent}>
@@ -245,7 +272,7 @@ export default function ResultsScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
       ) : recipes.length === 0 ? (
-        // Estado vazio
+        // Estado vazio geral
         <View style={styles.emptyState}>
           {ingredients.some(ing => {
             const i = ing.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -271,9 +298,21 @@ export default function ResultsScreen({ route, navigation }) {
             <Text style={styles.retryText}>Voltar à Despensa</Text>
           </TouchableOpacity>
         </View>
+      ) : filteredRecipes.length === 0 ? (
+        // Estado vazio do filtro
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyEmoji}>🥗</Text>
+          <Text style={styles.emptyTitle}>Sem resultados</Text>
+          <Text style={styles.emptyText}>
+            Nenhuma receita {filter === 'Vegetarian' ? 'vegetariana' : 'vegana'} encontrada para esses ingredientes.
+          </Text>
+          <TouchableOpacity style={styles.retryBtn} onPress={() => setFilter('All')}>
+            <Text style={styles.retryText}>Ver todas as receitas</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
         <FlatList
-          data={recipes}
+          data={filteredRecipes}
           keyExtractor={(item) => item.idMeal}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
@@ -346,6 +385,36 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.primary,
     fontWeight: '600',
+  },
+  filterBar: {
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  filterScroll: {
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  filterChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  filterChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  filterText: {
+    ...typography.styles.caption,
+    color: colors.textSecondary,
+    fontWeight: '600',
+  },
+  filterTextActive: {
+    color: colors.textOnPrimary,
   },
   listContent: {
     padding: 16,
@@ -463,19 +532,20 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     ...typography.styles.body,
-    color: colors.textMuted,
+    color: colors.textSecondary,
     textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 24,
   },
   retryBtn: {
-    backgroundColor: colors.primary,
     paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 14,
-    marginTop: 8,
+    paddingVertical: 12,
+    backgroundColor: colors.primary,
+    borderRadius: 12,
   },
   retryText: {
+    ...typography.styles.label,
     color: colors.textOnPrimary,
-    fontWeight: '700',
-    fontSize: 15,
+    fontWeight: '600',
   },
 });
