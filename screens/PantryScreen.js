@@ -131,6 +131,21 @@ export default function PantryScreen({ navigation }) {
     });
   };
 
+  const handleClearAll = () => {
+    Alert.alert(
+      'Desmarcar todos',
+      'Tem certeza que deseja desmarcar todos os ingredientes selecionados?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Desmarcar',
+          style: 'destructive',
+          onPress: () => setSelected(new Set()),
+        },
+      ]
+    );
+  };
+
 
   const handleFindRecipes = async () => {
     const ingredients = Array.from(selected);
@@ -182,6 +197,11 @@ export default function PantryScreen({ navigation }) {
                 : 'Selecione o que você tem em casa'}
             </Text>
           </View>
+          {selectedCount > 0 && (
+            <TouchableOpacity onPress={handleClearAll} style={styles.clearAllBtn} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+              <Text style={styles.clearAllText}>Limpar</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Barra de busca */}
@@ -354,6 +374,18 @@ const styles = StyleSheet.create({
     ...typography.styles.caption,
     color: colors.textMuted,
     marginTop: 2,
+  },
+  clearAllBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: colors.primaryLight,
+    borderRadius: 12,
+    marginLeft: 12,
+  },
+  clearAllText: {
+    ...typography.styles.caption,
+    color: colors.primary,
+    fontWeight: '700',
   },
   pantryIcon: {
     fontSize: 36,
