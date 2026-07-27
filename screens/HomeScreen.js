@@ -55,11 +55,15 @@ export default function HomeScreen({ navigation }) {
 
           <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={styles.greeting}>{getGreeting()},</Text>
-            <Text style={styles.name}>{profile?.name} {profile?.avatarEmoji}</Text>
+            <Text style={styles.name}>{profile?.name}</Text>
           </View>
 
-          <View style={styles.avatarBadge}>
-            <Text style={styles.avatarBadgeText}>{profile?.avatarEmoji}</Text>
+          <View style={[styles.avatarBadge, profile?.photoUri && { borderWidth: 0, backgroundColor: 'transparent' }]}>
+            {profile?.photoUri ? (
+              <Image source={{ uri: profile.photoUri }} style={styles.avatarImage} />
+            ) : (
+              <Text style={styles.avatarBadgeText}>{profile?.avatarEmoji}</Text>
+            )}
           </View>
         </View>
 
@@ -185,6 +189,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 26,
   },
   avatarBadgeText: {
     fontSize: 28,

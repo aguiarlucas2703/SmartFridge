@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
   title: {
     ...typography.styles.title,
     color: colors.primary,
+    flex: 1,
+    textAlign: 'center',
   },
   scroll: {
     flex: 1,
