@@ -249,7 +249,8 @@ const getStyles = (colors) => StyleSheet.create({
   statLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: 'rgba(241, 218, 218, 0.8)',
+    bold: true,
+    color: 'rgba(0, 0, 0, 0.8)',
     textAlign: 'center',
   },
   ctaButton: {
