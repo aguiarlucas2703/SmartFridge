@@ -70,13 +70,16 @@ export function ProfileProvider({ children }) {
   // --- Logout (limpa perfil mas mantém despensa) ---
   const logout = useCallback(async () => {
     try {
+      if (profile) {
+        await AsyncStorage.setItem('@smartfridge_last_profile', JSON.stringify(profile));
+      }
       await AsyncStorage.removeItem(STORAGE_KEYS.PROFILE);
       setProfile(null);
     } catch (error) {
       console.error('[ProfileContext] Erro ao fazer logout:', error);
       throw error;
     }
-  }, []);
+  }, [profile]);
 
   // --- Salvar ingredientes da despensa ---
   const savePantry = useCallback(async (ingredients) => {
@@ -142,3 +145,4 @@ export function useProfile() {
   }
   return context;
 }
+

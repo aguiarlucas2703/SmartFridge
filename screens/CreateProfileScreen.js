@@ -2,7 +2,7 @@
 // Primeiro fluxo do app: criação de perfil com nome e avatar emoji.
 // Persiste via ProfileContext → AsyncStorage.
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useProfile } from '../context/ProfileContext';
 import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
@@ -29,6 +31,19 @@ export default function CreateProfileScreen() {
   const [name, setName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(AVATARS[0]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [savedPhotoUri, setSavedPhotoUri] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem('@smartfridge_last_profile').then(data => {
+      if (data) {
+        const last = JSON.parse(data);
+        if (last.name) setName(last.name);
+        if (last.avatarEmoji) setSelectedAvatar(last.avatarEmoji);
+        if (last.photoUri) setSavedPhotoUri(last.photoUri);
+      }
+    }).catch(() => {});
+  }, []);
 
   // Animação de escala no botão
   const buttonScale = useRef(new Animated.Value(1)).current;
@@ -48,7 +63,7 @@ export default function CreateProfileScreen() {
     animateButton();
     setIsLoading(true);
     try {
-      await createProfile({ name: name.trim(), avatarEmoji: selectedAvatar });
+      await createProfile({ name: name.trim(), avatarEmoji: selectedAvatar, photoUri: savedPhotoUri });
       // RootNavigator detecta o profile e redireciona automaticamente
     } catch {
       Alert.alert('Erro', 'Não foi possível salvar seu perfil. Tente novamente.');
@@ -77,8 +92,12 @@ export default function CreateProfileScreen() {
           </View>
 
           {/* Avatar selecionado */}
-          <View style={styles.avatarDisplay}>
-            <Text style={styles.avatarLarge}>{selectedAvatar}</Text>
+          <View style={[styles.avatarDisplay, savedPhotoUri && { backgroundColor: 'transparent' }]}>
+            {savedPhotoUri ? (
+              <Image source={{ uri: savedPhotoUri }} style={styles.avatarImage} />
+            ) : (
+              <Text style={styles.avatarLarge}>{selectedAvatar}</Text>
+            )}
           </View>
 
           {/* Grid de avatares */}
@@ -178,6 +197,11 @@ const getStyles = (colors) => StyleSheet.create({
   avatarLarge: {
     fontSize: 52,
   },
+  avatarImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
   sectionLabel: {
     ...typography.styles.label,
     color: colors.textMuted,
@@ -239,5 +263,6 @@ const getStyles = (colors) => StyleSheet.create({
     letterSpacing: 0.3,
   },
 });
+
 
 
