@@ -30,7 +30,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const styles = getStyles(colors);
   const { recipe: routeRecipe } = route.params;
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { pantry } = useProfile();
+  const { pantry, addIngredient } = useProfile();
   const insets = useSafeAreaInsets();
 
   const [recipe, setRecipe] = useState(routeRecipe.detail ? routeRecipe : null);
@@ -259,7 +259,16 @@ export default function RecipeDetailScreen({ route, navigation }) {
                   {measures[index] ? (
                     <Text style={styles.ingredientMeasure}>{measures[index]}</Text>
                   ) : null}
-                  <Text style={styles.ingredientStatus}>{has ? '✓' : '+'}</Text>
+                  {has ? (
+                    <Text style={styles.ingredientStatus}>✓</Text>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => addIngredient(ptLabel)}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    >
+                      <Text style={[styles.ingredientStatus, { color: colors.primary }]}>+</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               );
             })
@@ -287,7 +296,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
             activeOpacity={0.85}
           >
             <Text style={styles.favButtonText}>
-              {favorited ? '❤️ Remover dos Favoritos' : '🤍 Salvar nos Favoritos'}
+              {favorited ? '❤️ Remover Favorito' : '🤍 Salvar Favorito'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -513,6 +522,7 @@ const getStyles = (colors) => StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.primary,
+    textAlign: 'center',
   },
 });
 

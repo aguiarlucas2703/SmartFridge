@@ -14,15 +14,26 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFavorites } from '../context/FavoritesContext';
 import { useTheme } from '../context/ThemeContext';
+import { useProfile } from '../context/ProfileContext';
 import { typography } from '../theme/typography';
 import MenuDrawer from '../components/MenuDrawer';
+import { calculateCompatibility } from '../services/compatibility';
+import { extractIngredients } from '../services/mealdb';
 
-function FavoriteCard({ recipe, onPress, onRemove, styles }) {
+function FavoriteCard({ recipe, onPress, onRemove, styles, pantry }) {
   const detail = recipe.detail;
   const name = detail?.strMeal ?? recipe.strMeal;
   const thumb = detail?.strMealThumb ?? recipe.strMealThumb;
   const category = detail?.strCategory;
-  const score = recipe.score;
+  
+  let score = recipe.score;
+  if (pantry) {
+    const ingredients = detail ? extractIngredients(detail) : recipe.matching?.concat(recipe.missing ?? []) ?? [];
+    if (ingredients.length > 0) {
+      const compat = calculateCompatibility(ingredients, pantry);
+      score = compat.score;
+    }
+  }
 
   return (
     <TouchableOpacity
@@ -85,6 +96,7 @@ export default function FavoritesScreen({ navigation }) {
   const { colors, isDark, toggleTheme } = useTheme();
   const styles = getStyles(colors);
   const { favorites, toggleFavorite } = useFavorites();
+  const { pantry } = useProfile();
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const handleRemove = (recipe) => {
@@ -141,6 +153,7 @@ export default function FavoritesScreen({ navigation }) {
             <FavoriteCard
               styles={styles}
               recipe={item}
+              pantry={pantry}
               onPress={() => handlePress(item)}
               onRemove={() => handleRemove(item)}
             />
