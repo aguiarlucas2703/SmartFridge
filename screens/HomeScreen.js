@@ -82,12 +82,12 @@ export default function HomeScreen({ navigation }) {
           <View style={[styles.statCard, { backgroundColor: colors.primary }]}>
             <Image source={require('../assets/icons/icon_pantry.png')} style={styles.statIcon} />
             <Text style={styles.statValue}>{pantry.length}</Text>
-            <Text style={styles.statLabel}>ingredientes{'\n'}na despensa</Text>
+            <Text style={styles.statLabel}>Ingredientes{'\n'}na despensa</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: colors.accent }]}>
             <Image source={require('../assets/icons/icon_favorites.png')} style={styles.statIcon} />
             <Text style={styles.statValue}>{favorites.length}</Text>
-            <Text style={styles.statLabel}>receitas{'\n'}favoritas</Text>
+            <Text style={styles.statLabel}>Receitas{'\n'}favoritas</Text>
           </View>
         </View>
 

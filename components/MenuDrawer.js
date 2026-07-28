@@ -173,14 +173,18 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           {/* === Features === */}
           <View style={styles.featureList}>
             {[
-              { icon: '🧠', text: 'Algoritmo de compatibilidade próprio' },
-              { icon: '🌐', text: 'Integração com TheMealDB API' },
-              { icon: '🇧🇷', text: 'Tradução automática para PT-BR' },
-              { icon: '💾', text: 'Despensa salva offline' },
-              { icon: '❤️', text: 'Receitas favoritas persistidas' },
-            ].map(({ icon, text }) => (
+              { iconImage: require('../assets/icons/icon_brain.png'), text: 'Algoritmo de compatibilidade próprio' },
+              { iconImage: require('../assets/icons/icon_api.png'), text: 'Integração com TheMealDB API' },
+              { iconImage: require('../assets/icons/icon_brazil_2.png'), text: 'Tradução automática para PT-BR' },
+              { iconImage: require('../assets/icons/icon_offline.png'), text: 'Despensa salva offline' },
+              { emoji: '❤️', text: 'Receitas favoritas persistidas' },
+            ].map(({ iconImage, emoji, text }) => (
               <View key={text} style={styles.featureItem}>
-                <Text style={styles.featureIcon}>{icon}</Text>
+                {iconImage ? (
+                  <Image source={iconImage} style={styles.featureImageIcon} />
+                ) : (
+                  <Text style={styles.featureIcon}>{emoji}</Text>
+                )}
                 <Text style={styles.featureText}>{text}</Text>
               </View>
             ))}
@@ -375,6 +379,7 @@ const getStyles = (colors) => StyleSheet.create({
     gap: 10,
   },
   featureIcon: { fontSize: 15 },
+  featureImageIcon: { width: 16, height: 16, resizeMode: 'contain' },
   featureText: {
     ...typography.styles.caption,
     color: colors.textSecondary,
