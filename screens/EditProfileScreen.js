@@ -23,7 +23,7 @@ export default function EditProfileScreen({ navigation }) {
   const { colors, isDark, toggleTheme } = useTheme();
   const styles = getStyles(colors);
   const { profile, updateProfile } = useProfile();
-  
+
   const [name, setName] = useState(profile?.name || '');
   const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatarEmoji || AVATARS[0]);
   const [photoUri, setPhotoUri] = useState(profile?.photoUri || null);
@@ -117,10 +117,10 @@ export default function EditProfileScreen({ navigation }) {
               <Text style={styles.avatarLarge}>{selectedAvatar}</Text>
             )}
           </View>
-          
+
           <View style={styles.photoActionsRow}>
             <TouchableOpacity style={styles.photoActionBtn} onPress={handlePickImage}>
-              <Text style={styles.photoActionText}>📸 Galeria</Text>
+              <Text style={styles.photoActionText}>🖼️ Galeria</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.photoActionBtn} onPress={handleTakePhoto}>
               <Text style={styles.photoActionText}>📷 Câmera</Text>

@@ -467,6 +467,7 @@ const getStyles = (colors) => StyleSheet.create({
     fontWeight: '700',
     width: 20,
     textAlign: 'center',
+    color: colors.text,
   },
   stepRow: {
     flexDirection: 'row',

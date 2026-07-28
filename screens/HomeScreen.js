@@ -130,7 +130,11 @@ export default function HomeScreen({ navigation }) {
                   onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}
                   activeOpacity={0.8}
                 >
-                  <Text style={styles.favoriteThumbnail}>🍽️</Text>
+                  {item.detail?.strMealThumb || item.strMealThumb ? (
+                    <Image source={{ uri: `${item.detail?.strMealThumb || item.strMealThumb}/preview` }} style={styles.favoriteImage} />
+                  ) : (
+                    <Text style={styles.favoriteThumbnail}>🍽️</Text>
+                  )}
                   <Text style={styles.favoriteName} numberOfLines={2}>
                     {item.strMeal}
                   </Text>
@@ -310,9 +314,8 @@ const getStyles = (colors) => StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  favoriteThumbnail: {
-    fontSize: 40,
-  },
+  favoriteImage: { width: 44, height: 44, borderRadius: 22 },
+  favoriteThumbnail: { fontSize: 40 },
   favoriteName: {
     fontSize: 12,
     fontWeight: '600',
@@ -352,5 +355,6 @@ const getStyles = (colors) => StyleSheet.create({
     borderRadius: 2,
   },
 });
+
 
 
