@@ -92,7 +92,7 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           {/* === Cabeçalho do app === */}
           <View style={styles.brandSection}>
             <Image
-              source={require('../assets/logo.png')}
+              source={isDark ? require('../assets/smartfridge_escuro.png') : require('../assets/logo.png')}
               style={styles.logoImage}
               resizeMode="contain"
             />
