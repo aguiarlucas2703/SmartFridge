@@ -2,7 +2,7 @@
 // O usuário seleciona ingredientes pré-definidos e/ou adiciona ingredientes customizados.
 // A seleção persiste via ProfileContext → AsyncStorage.
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -92,25 +92,23 @@ function IngredientChip({ label, selected, onPress, styles }) {
 export default function PantryScreen({ navigation }) {
   const { colors, isDark, toggleTheme } = useTheme();
   const styles = getStyles(colors);
-  const { pantry, savePantry } = useProfile();
+  const { pantry, savePantry, addIngredient, removeIngredient } = useProfile();
 
   // Estados do drawer
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [selected, setSelected] = useState(() => new Set(pantry));
   const [searchQuery, setSearchQuery] = useState('');
   const [customInput, setCustomInput] = useState('');
-  const [customIngredients, setCustomIngredients] = useState(() =>
-    pantry.filter((i) => !ALL_PRESETS.includes(i))
-  );
+  
+  const selected = useMemo(() => new Set(pantry), [pantry]);
+  const customIngredients = useMemo(() => pantry.filter((i) => !ALL_PRESETS.includes(i)), [pantry]);
 
   const toggleIngredient = useCallback((ingredient) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(ingredient)) next.delete(ingredient);
-      else next.add(ingredient);
-      return next;
-    });
-  }, []);
+    if (pantry.includes(ingredient)) {
+      removeIngredient(ingredient);
+    } else {
+      addIngredient(ingredient);
+    }
+  }, [pantry, removeIngredient, addIngredient]);
 
   const addCustomIngredient = () => {
     const value = customInput.trim().toLowerCase();
@@ -119,18 +117,12 @@ export default function PantryScreen({ navigation }) {
       Alert.alert('Já adicionado', `"${value}" já está na sua despensa.`);
       return;
     }
-    setCustomIngredients((prev) => [...prev, value]);
-    setSelected((prev) => new Set([...prev, value]));
+    addIngredient(value);
     setCustomInput('');
   };
 
   const removeCustomIngredient = (ingredient) => {
-    setCustomIngredients((prev) => prev.filter((i) => i !== ingredient));
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.delete(ingredient);
-      return next;
-    });
+    removeIngredient(ingredient);
   };
 
   const handleClearAll = () => {
@@ -143,7 +135,6 @@ export default function PantryScreen({ navigation }) {
           text: 'Desmarcar',
           style: 'destructive',
           onPress: async () => {
-            setSelected(new Set());
             await savePantry([]);
           },
         },
@@ -553,5 +544,7 @@ const getStyles = (colors) => StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
 
 

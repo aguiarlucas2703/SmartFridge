@@ -30,7 +30,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const styles = getStyles(colors);
   const { recipe: routeRecipe } = route.params;
   const { toggleFavorite, isFavorite } = useFavorites();
-  const { pantry, addIngredient } = useProfile();
+  const { pantry, addIngredient, removeIngredient } = useProfile();
   const insets = useSafeAreaInsets();
 
   const [recipe, setRecipe] = useState(routeRecipe.detail ? routeRecipe : null);
@@ -260,10 +260,15 @@ export default function RecipeDetailScreen({ route, navigation }) {
                     <Text style={styles.ingredientMeasure}>{measures[index]}</Text>
                   ) : null}
                   {has ? (
-                    <Text style={styles.ingredientStatus}>✓</Text>
+                    <TouchableOpacity
+                      onPress={() => removeIngredient(ing.trim().toLowerCase())}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    >
+                      <Text style={[styles.ingredientStatus, { color: colors.primary }]}>✓</Text>
+                    </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
-                      onPress={() => addIngredient(ptLabel)}
+                      onPress={() => addIngredient(ing)}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
                       <Text style={[styles.ingredientStatus, { color: colors.primary }]}>+</Text>
