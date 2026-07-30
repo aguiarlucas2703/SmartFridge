@@ -137,7 +137,7 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Favorites')}>
             <Image source={require('../assets/icons/icon_favorites.png')} style={styles.navIcon} />
             <View style={styles.navRight}>
-              <Text style={styles.navText}>Favoritos</Text>
+              <Text style={styles.navText}>Favoritoss</Text>
               {favorites.length > 0 && (
                 <View style={styles.countBadge}>
                   <Text style={styles.countText}>{favorites.length}</Text>
