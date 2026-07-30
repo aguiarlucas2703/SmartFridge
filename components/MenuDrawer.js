@@ -129,6 +129,11 @@ export default function MenuDrawer({ visible, onClose, navigation }) {
             <Text style={styles.navText}>Dicas Anti-desperdício</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Converter')}>
+            <Text style={styles.navEmoji}>⚖️</Text>
+            <Text style={styles.navText}>Conversor de Medidas</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.navItem} onPress={() => handleNav('Favorites')}>
             <Image source={require('../assets/icons/icon_favorites.png')} style={styles.navIcon} />
             <View style={styles.navRight}>

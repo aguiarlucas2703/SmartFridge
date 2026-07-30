@@ -22,6 +22,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import TipsScreen from '../screens/TipsScreen';
 import TipsDetailScreen from '../screens/TipsDetailScreen';
+import ConverterScreen from '../screens/ConverterScreen';
 
 // === Ícones customizados ===
 import { Text, Image } from 'react-native';
@@ -182,7 +183,10 @@ export default function RootNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {profile ? (
           // Usuário autenticado → app principal
-          <Stack.Screen name="Main" component={MainTabs} />
+          <>
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen name="Converter" component={ConverterScreen} />
+          </>
         ) : (
           // Sem perfil → tela de criação
           <Stack.Screen name="CreateProfile" component={CreateProfileScreen} />
@@ -218,3 +222,4 @@ const getStyles = (colors) => StyleSheet.create({
     marginTop: 2,
   },
 });
+

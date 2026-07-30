@@ -48,23 +48,7 @@ export default function EditProfileScreen({ navigation }) {
     }
   };
 
-  const handleTakePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Permissão necessária', 'Precisamos de acesso à sua câmera para tirar uma foto.');
-      return;
-    }
 
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.5,
-    });
-
-    if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
-    }
-  };
 
   const handleRemovePhoto = () => {
     setPhotoUri(null);
@@ -122,9 +106,7 @@ export default function EditProfileScreen({ navigation }) {
             <TouchableOpacity style={styles.photoActionBtn} onPress={handlePickImage}>
               <Text style={styles.photoActionText}>🖼️ Galeria</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.photoActionBtn} onPress={handleTakePhoto}>
-              <Text style={styles.photoActionText}>📷 Câmera</Text>
-            </TouchableOpacity>
+
             {photoUri && (
               <TouchableOpacity style={styles.photoActionBtn} onPress={handleRemovePhoto}>
                 <Text style={[styles.photoActionText, { color: colors.error }]}>✕ Remover</Text>
