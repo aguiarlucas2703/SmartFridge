@@ -28,6 +28,13 @@ export default function ProfileScreen({ navigation }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
+  const getChefRank = (count) => {
+    if (count <= 5) return '🍳 Cozinheiro de Fim de Semana';
+    if (count <= 15) return '👨‍🍳 Chef Amador';
+    if (count <= 25) return '🌟 Sub-Chef';
+    return '👑 Mestre Cuca Estrelado';
+  };
+
   const handleLogout = () => {
     setLogoutModalVisible(true);
   };
@@ -74,7 +81,7 @@ export default function ProfileScreen({ navigation }) {
             )}
           </View>
           <Text style={styles.name}>{profile?.name}</Text>
-          <Text style={styles.userTag}>Usuário SmartFridge</Text>
+          <Text style={styles.userTag}>{getChefRank(pantry.length)}</Text>
 
           <TouchableOpacity
             style={styles.editProfileBtn}
