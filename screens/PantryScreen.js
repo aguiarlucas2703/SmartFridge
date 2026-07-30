@@ -22,6 +22,7 @@ import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import { translateIngredient } from '../services/translator';
 import MenuDrawer from '../components/MenuDrawer';
+import ConfirmModal from '../components/ConfirmModal';
 
 // === Ingredientes pré-definidos agrupados por categoria ===
 // IMPORTANTE: as chaves são os nomes EXATOS que a TheMealDB aceita (validados via API).
@@ -55,7 +56,7 @@ const PRESET_INGREDIENTS = {
     'soy sauce', 'vinegar', 'lemon', 'ginger', 'cinnamon',
     'cumin', 'paprika', 'turmeric', 'cayenne pepper', 'oregano',
     'basil', 'thyme', 'rosemary', 'parsley', 'coriander',
-    'baking powder'
+    'baking powder', "Pepper"
   ],
 };
 
@@ -98,7 +99,8 @@ export default function PantryScreen({ navigation }) {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [customInput, setCustomInput] = useState('');
-  
+  const [clearModalVisible, setClearModalVisible] = useState(false);
+
   const selected = useMemo(() => new Set(pantry), [pantry]);
   const customIngredients = useMemo(() => pantry.filter((i) => !ALL_PRESETS.includes(i)), [pantry]);
 
@@ -126,20 +128,12 @@ export default function PantryScreen({ navigation }) {
   };
 
   const handleClearAll = () => {
-    Alert.alert(
-      'Desmarcar todos',
-      'Tem certeza que deseja desmarcar todos os ingredientes selecionados?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Desmarcar',
-          style: 'destructive',
-          onPress: async () => {
-            await savePantry([]);
-          },
-        },
-      ]
-    );
+    setClearModalVisible(true);
+  };
+
+  const confirmClearAll = async () => {
+    setClearModalVisible(false);
+    await savePantry([]);
   };
 
 
@@ -329,6 +323,16 @@ export default function PantryScreen({ navigation }) {
         visible={drawerVisible}
         onClose={() => setDrawerVisible(false)}
         navigation={navigation}
+      />
+      <ConfirmModal
+        visible={clearModalVisible}
+        title="Desmarcar todos"
+        message="Tem certeza que deseja desmarcar todos os ingredientes selecionados?"
+        onCancel={() => setClearModalVisible(false)}
+        onConfirm={confirmClearAll}
+        confirmText="Desmarcar"
+        isDestructive={true}
+        colors={colors}
       />
     </SafeAreaView>
   );
@@ -544,6 +548,7 @@ const getStyles = (colors) => StyleSheet.create({
     textAlign: 'center',
   },
 });
+
 
 
 

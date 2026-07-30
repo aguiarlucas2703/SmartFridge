@@ -17,6 +17,7 @@ import { useFavorites } from '../context/FavoritesContext';
 import { useTheme } from '../context/ThemeContext';
 import { typography } from '../theme/typography';
 import MenuDrawer from '../components/MenuDrawer';
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function ProfileScreen({ navigation }) {
   const { colors, isDark, toggleTheme } = useTheme();
@@ -25,29 +26,20 @@ export default function ProfileScreen({ navigation }) {
   const { favorites } = useFavorites();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
   const handleLogout = () => {
-    Alert.alert(
-      'Sair da conta',
-      'Tem certeza? Seus ingredientes e favoritos serão mantidos.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Sair',
-          style: 'destructive',
-          onPress: async () => {
-            setIsLoggingOut(true);
-            try {
-              await logout();
-              // RootNavigator detecta profile null e redireciona automaticamente
-            } catch {
-              Alert.alert('Erro', 'Não foi possível sair. Tente novamente.');
-              setIsLoggingOut(false);
-            }
-          },
-        },
-      ]
-    );
+    setLogoutModalVisible(true);
+  };
+
+  const confirmLogout = async () => {
+    setLogoutModalVisible(false);
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -336,6 +328,7 @@ const getStyles = (colors) => StyleSheet.create({
     color: colors.textMuted,
   },
 });
+
 
 
 

@@ -250,7 +250,7 @@ const getStyles = (colors) => StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     bold: true,
-    color: 'rgba(0, 0, 0, 0.8)',
+    color: 'rgb(250, 246, 246)',
     textAlign: 'center',
   },
   ctaButton: {
