@@ -141,6 +141,16 @@ export default function ProfileScreen({ navigation }) {
         onClose={() => setDrawerVisible(false)}
         navigation={navigation}
       />
+      <ConfirmModal
+        visible={logoutModalVisible}
+        title="Sair da conta"
+        message="Tem certeza? Seus ingredientes e favoritos serão mantidos."
+        onCancel={() => setLogoutModalVisible(false)}
+        onConfirm={confirmLogout}
+        confirmText="Sair"
+        isDestructive={true}
+        colors={colors}
+      />
     </SafeAreaView>
   );
 }
@@ -328,6 +338,7 @@ const getStyles = (colors) => StyleSheet.create({
     color: colors.textMuted,
   },
 });
+
 
 
 
